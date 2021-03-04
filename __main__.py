@@ -7,7 +7,7 @@ from Controllers.Rules import Settings
 
 data_path = os.path.join("SequentProver", "data")
 ftue_path = os.path.join(data_path, "Presets", "FTUE")
-untracked_src_files = ["Atoms.json", "Names.json", "Settings.json"]
+untracked_src_files = ("Atoms.json", "Names.json", "Settings.json")
 
 
 def main():

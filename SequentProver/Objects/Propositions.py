@@ -28,11 +28,11 @@ class Proposition:
 class Unary(Proposition):
     """Superclass for unary propositions."""
     arity: int = 1
-    __slots__ = ["prop", "_complexity"]
+    __slots__ = ["_prop", "_complexity"]
 
     def __init__(self, prop) -> None:
         if isinstance(prop, Proposition) or isinstance(prop, str):
-            self.prop = prop
+            self._prop = prop
         else:
             raise RuntimeError(f"{prop} is not a Proposition")
         self._complexity = None
@@ -42,6 +42,10 @@ class Unary(Proposition):
 
     def __str__(self) -> str:
         return f"({self.string} {self.prop})"
+
+    @property
+    def prop(self):
+        return self._prop
 
     @property
     def complexity(self):
@@ -56,12 +60,12 @@ class Unary(Proposition):
 class Binary(Proposition):
     """Superclass for binary propositions"""
     arity: int = 2
-    __slots__ = ["left", "right", "_complexity"]
+    __slots__ = ["_left", "_right", "_complexity"]
 
     def __init__(self, left: Proposition, right: Proposition) -> None:
         if isinstance(left, Proposition) and isinstance(right, Proposition):
-            self.left = left
-            self.right = right
+            self._left = left
+            self._right = right
         else:
             raise RuntimeError(f"Either {left} or {right} is not a Proposition")
         self._complexity = None
@@ -71,6 +75,14 @@ class Binary(Proposition):
 
     def __str__(self) -> str:
         return f"({self.left} {self.string} {self.right})"
+
+    @property
+    def left(self):
+        return self._left
+
+    @property
+    def right(self):
+        return self._right
 
     @property
     def complexity(self) -> int:
@@ -88,7 +100,7 @@ class Atom(Unary):
 
     def __int__(self, prop: str):
         if isinstance(prop, str):
-            self.prop = prop
+            self._prop = prop
         else:
             raise RuntimeError(f"{prop} is not a string.")
 

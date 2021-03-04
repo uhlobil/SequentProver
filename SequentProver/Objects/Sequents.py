@@ -27,7 +27,7 @@ import itertools
 from collections import namedtuple
 from typing import Sequence, Any, Generator
 
-import Objects.Propositions
+from Objects import Propositions
 
 principal = namedtuple('principal', 'side, index, proposition')
 
@@ -39,11 +39,11 @@ class Sequent:
     The principal is the leftmost proposition with one or more connectives.
     """
 
-    __slots__ = ["ant", "con", "_complexity", "_principal", "_is_reflexive"]
+    __slots__ = ["_ant", "_con", "_complexity", "_principal", "_is_reflexive"]
 
     def __init__(self, antecedent: Sequence, consequent: Sequence):
-        self.ant = [a for a in antecedent]
-        self.con = [c for c in consequent]
+        self._ant = tuple(prop for prop in antecedent)
+        self._con = tuple(prop for prop in consequent)
         self._complexity = None
         self._principal = None
         self._is_reflexive = None
@@ -77,6 +77,14 @@ class Sequent:
         return True
 
     @property
+    def ant(self):
+        return self._ant
+
+    @property
+    def con(self):
+        return self._con
+
+    @property
     def complexity(self):
         """The number of connectives in the sequent."""
         if self._complexity is None:
@@ -94,7 +102,7 @@ class Sequent:
             raise AttributeError(f"{self.__repr__} is atomic.")
         if self._principal is None:
             attributes = self._get_principal()
-            proposition = Objects.Propositions.create(attributes)
+            proposition = Propositions.create(attributes)
             self._principal = principal(attributes.side, attributes.index, proposition)
         return self._principal
 
@@ -152,8 +160,8 @@ class Sequent:
 
     def _base_template(self):
         """Returns this sequent minus the principal."""
-        temp_ant = [a for a in self.ant]
-        temp_con = [c for c in self.con]
+        temp_ant = [prop for prop in self.ant]
+        temp_con = [prop for prop in self.con]
         if self.principal.side == "ant":
             del temp_ant[self.principal.index]
         else:
@@ -162,7 +170,7 @@ class Sequent:
 
     def _permute_template(self) -> Generator[tuple, list, None]:
         """Yields possible two-parent templates for explosive sequents."""
-        base = self._base_template()
+        base: Sequent = self._base_template()
         ant_permutations = _permute(base.ant)
         for antecedent in ant_permutations:
             con_permutations = _permute(base.con)
@@ -184,11 +192,11 @@ class Sequent:
             yield from _recombine_additive_one_parent(templates, units)
 
 
-def _permute(propositions: list) -> Generator[tuple, Any, None]:
+def _permute(propositions: tuple) -> Generator[tuple, Any, None]:
     """Generates possible combinations for propositions in sides of two
     parent multiplicative rules."""
     permutations = [
-        list(i) for i in itertools.product([0, 1], repeat=len(propositions))
+        tuple(i) for i in itertools.product([0, 1], repeat=len(propositions))
     ]
     for permutation in permutations:
         x = []
@@ -204,10 +212,10 @@ def _permute(propositions: list) -> Generator[tuple, Any, None]:
 def _recombine_additive_two_parent(templates, units):
     """Yields sequents decomposed from Additive Right If, Left And,
     and Right Or."""
-    x_ant = units[0].ant + templates.ant
-    x_con = units[0].con + templates.con
-    y_ant = units[1].ant + templates.ant
-    y_con = units[1].con + templates.con
+    x_ant = units[0].ant + [prop for prop in templates.ant]
+    x_con = units[0].con + [prop for prop in templates.con]
+    y_ant = units[1].ant + [prop for prop in templates.ant]
+    y_con = units[1].con + [prop for prop in templates.con]
     yield Sequent(x_ant, x_con), Sequent(y_ant, y_con)
 
 
@@ -215,16 +223,16 @@ def _recombine_additive_one_parent(template, units):
     """Yields sequents decomposed from Additive Left If, Right And,
     and Left Or."""
     for unit in units:
-        antecedent = unit.ant + template.ant
-        consequent = unit.con + template.con
+        antecedent = unit.ant + [prop for prop in template.ant]
+        consequent = unit.con + [prop for prop in template.con]
         yield Sequent(antecedent, consequent),
 
 
 def _recombine_multiplicative_one_parent(templates, units):
     """Yields sequents decomposed from Multiplicative Right If,
     Left And, and Right Or."""
-    antecedent = units[0].ant + templates.ant
-    consequent = units[0].con + templates.con
+    antecedent = units[0].ant + [prop for prop in templates.ant]
+    consequent = units[0].con + [prop for prop in templates.con]
     yield Sequent(antecedent, consequent),
 
 
@@ -232,8 +240,8 @@ def _recombine_multiplicative_two_parent(templates, units):
     """Yields sequents decomposed from Multiplicative Left If,
     Left And, and Right Or."""
     for template in templates:
-        x_ant = units[0].ant + template[0].ant
-        x_con = units[0].con + template[0].con
-        y_ant = units[1].ant + template[1].ant
-        y_con = units[1].con + template[1].con
+        x_ant = units[0].ant + [prop for prop in template[0].ant]
+        x_con = units[0].con + [prop for prop in template[0].con]
+        y_ant = units[1].ant + [prop for prop in template[1].ant]
+        y_con = units[1].con + [prop for prop in template[1].con]
         yield Sequent(x_ant, x_con), Sequent(y_ant, y_con)

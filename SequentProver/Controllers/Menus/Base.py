@@ -72,6 +72,9 @@ def confirm_menu(explanation):
     return bool(selection)
 
 
+menu_option = namedtuple('Option', 'label')
+
+
 class MenuHandler:
     """Displays and handles input for menus"""
     separator = '=' * 78
@@ -80,7 +83,6 @@ class MenuHandler:
     def __init__(self, options=None, message=None):
         if options is None:
             options = []
-        menu_option = namedtuple('Option', 'label')
         self.options = {0: menu_option("Exit")}
         for index, value in enumerate(options):
             self.options.update({1 + index: menu_option(value)})
