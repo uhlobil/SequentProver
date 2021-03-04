@@ -9,7 +9,7 @@
         "L~": "Neg",
         "R~": "Neg"
     },
-    "Contraction": true,
+    "Contraction": false,
     "Reflexivity": true,
     "Input File": "Not Yet Configured",
     "Output File": "Not Yet Configured"

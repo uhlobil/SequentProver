@@ -35,12 +35,11 @@ principal = namedtuple('principal', 'side, index, proposition')
 class Sequent:
     """The main concern of the Sequent Prover.
 
-    complexity is the number of connectives in the sequent.
-
-    the principal is the leftmost proposition with one or more connectives.
-
-
+    Complexity is the number of connectives in the sequent.
+    The principal is the leftmost proposition with one or more connectives.
     """
+
+    __slots__ = ["ant", "con", "_complexity", "_principal", "_is_reflexive"]
 
     def __init__(self, antecedent: Sequence, consequent: Sequence):
         self.ant = [a for a in antecedent]

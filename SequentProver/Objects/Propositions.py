@@ -28,13 +28,14 @@ class Proposition:
 class Unary(Proposition):
     """Superclass for unary propositions."""
     arity: int = 1
-    _complexity = None
+    __slots__ = ["prop", "_complexity"]
 
     def __init__(self, prop) -> None:
         if isinstance(prop, Proposition) or isinstance(prop, str):
             self.prop = prop
         else:
             raise RuntimeError(f"{prop} is not a Proposition")
+        self._complexity = None
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.prop})"
@@ -55,7 +56,7 @@ class Unary(Proposition):
 class Binary(Proposition):
     """Superclass for binary propositions"""
     arity: int = 2
-    _complexity = None
+    __slots__ = ["left", "right", "_complexity"]
 
     def __init__(self, left: Proposition, right: Proposition) -> None:
         if isinstance(left, Proposition) and isinstance(right, Proposition):
@@ -63,6 +64,7 @@ class Binary(Proposition):
             self.right = right
         else:
             raise RuntimeError(f"Either {left} or {right} is not a Proposition")
+        self._complexity = None
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.left}, {self.right})"
