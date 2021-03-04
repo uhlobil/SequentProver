@@ -1,0 +1,6 @@
+SequentProver/data/Runs
+SequentProver/data/Atoms.json
+SequentProver/data/Names.json
+SequentProver/data/Settings.json
+
+*.pyc
