@@ -1,0 +1,30 @@
+{
+    "0000": [
+        "(Herrings are red or Salmon are Blue) |~ (Tuna are green and Mackerel are yellow)",
+        "Root"
+    ],
+    "0000000L": [
+        "Herrings are red |~ (Tuna are green and Mackerel are yellow)",
+        "Lv"
+    ],
+    "0000000L000L": [
+        "Herrings are red |~ Tuna are green",
+        "R&"
+    ],
+    "0000000L000R": [
+        "Herrings are red |~ Mackerel are yellow",
+        "R&"
+    ],
+    "0000000R": [
+        "Salmon are Blue |~ (Tuna are green and Mackerel are yellow)",
+        "Lv"
+    ],
+    "0000000R000L": [
+        "Salmon are Blue |~ Tuna are green",
+        "R&"
+    ],
+    "0000000R000R": [
+        "Salmon are Blue |~ Mackerel are yellow",
+        "R&"
+    ]
+}

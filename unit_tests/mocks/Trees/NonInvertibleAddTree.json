@@ -1,0 +1,32 @@
+[
+    {
+        "0000": [
+            "(Tweety is a bird and Sylvester is a cat) |~ (Tom is a dog or Tom is an owl)",
+            "Root"
+        ],
+        "0000aaaM": [
+            "Tweety is a bird |~ (Tom is a dog or Tom is an owl)",
+            "L&"
+        ],
+        "0000aaaMaaaM": [
+            "Tweety is a bird |~ Tom is a dog",
+            "Rv"
+        ],
+        "0000aaaMaabM": [
+            "Tweety is a bird |~ Tom is an owl",
+            "Rv"
+        ],
+        "0000aabM": [
+            "Sylvester is a cat |~ (Tom is a dog or Tom is an owl)",
+            "L&"
+        ],
+        "0000aabMaaaM": [
+            "Sylvester is a cat |~ Tom is a dog",
+            "Rv"
+        ],
+        "0000aabMaabM": [
+            "Sylvester is a cat |~ Tom is an owl",
+            "Rv"
+        ]
+    }
+]

@@ -1,0 +1,10 @@
+{
+    "L->": "Mult",
+    "R->": "Add",
+    "L&": "Add",
+    "R&": "Mult",
+    "Lv": "Mult",
+    "Rv": "Add",
+    "L~": "Neg",
+    "R~": "Neg"
+}

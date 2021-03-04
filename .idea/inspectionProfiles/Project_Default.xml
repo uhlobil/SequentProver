@@ -1,0 +1,48 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="N802" />
+          <option value="N813" />
+        </list>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="Objects.Propositions.Proposition" />
+          <option value="Objects.Propositions.Conditional.left" />
+          <option value="Objects.Propositions.Conditional.right" />
+          <option value="Objects.Propositions.Conjunction.left" />
+          <option value="Objects.Propositions.Conjunction.right" />
+          <option value="Objects.Propositions.Disjunction.left" />
+          <option value="Objects.Propositions.Disjunction.right" />
+          <option value="Objects.Propositions.Proposition.complexity" />
+          <option value="Objects.Propositions.Binary.symbol" />
+          <option value="Objects.Propositions.Binary.string" />
+          <option value="Objects.Propositions.Binary._set_invertibility_bool" />
+          <option value="Objects.Sequent.Sequent" />
+          <option value="Objects.Propositions.Unary.string" />
+          <option value="Objects.Decomposition.RightConditional.left" />
+          <option value="Objects.Decomposition.RightConditional.right" />
+          <option value="Objects.Decomposition.LeftConjunction.left" />
+          <option value="Objects.Decomposition.LeftConjunction.right" />
+          <option value="Objects.Decomposition.LeftConditional.left" />
+          <option value="Objects.Decomposition.LeftConditional.right" />
+          <option value="Objects.Decomposition.DecompProp.side" />
+          <option value="Objects.Decomposition.DecompProp.symbol" />
+          <option value="Objects.Decomposition.principal" />
+          <option value="Objects.Decomposition.RightConditional.right_rule" />
+          <option value="Objects.Decomposition.RightConjunction.left" />
+          <option value="Objects.Decomposition.RightConjunction.right" />
+          <option value="Objects.Decomposition.LeftDisjunction.left" />
+          <option value="Objects.Decomposition.LeftDisjunction.right" />
+          <option value="Objects.Decomposition.RightDisjunction.left" />
+          <option value="Objects.Decomposition.RightDisjunction.right" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

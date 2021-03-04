@@ -1,0 +1,13 @@
+Socrates is human |~ Socrates is mortal
+(Tweety is a bird and Sylvester is a cat) |~ (Tom is a dog or Tom is an owl)
+(Herrings are red or Salmon are Blue) |~ (Tuna are green and Mackerel are yellow)
+(Eight twenties implies Four forties) |~ (Three times five implies Five times Three)
+(not Aristotle eats lemons) |~ (not Alexander conquers Scotland)
+(Disks or Quetzals), (not (Quetzals or Harmans)) |~ (not (Harmans and Disks))
+(Left Conjunct and Right Conjunct) |~ (Left Conjunct and Right Conjunct)
+(Left Disjunct or Right Disjunct) |~ (Left Disjunct or Right Disjunct)
+(Antecedent implies Consequent) |~ (Antecedent implies Consequent)
+(not Negatum) |~ (not Negatum)
+ |~ (Daylight implies Nighttime)
+((Albert or Betty) implies (Carol and Daniel)) |~ 
+((not (A implies B)) and (C and (not D))), ((B or (not A)) or ((C and E) implies D)) |~ (not E)

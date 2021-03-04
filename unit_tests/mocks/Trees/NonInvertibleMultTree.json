@@ -1,0 +1,56 @@
+[
+    {
+        "0000": [
+            "(Herrings are red or Salmon are Blue) |~ (Tuna are green and Mackerel are yellow)",
+            "Root"
+        ],
+        "0000aaaL": [
+            "Herrings are red |~ (Tuna are green and Mackerel are yellow)",
+            "Lv"
+        ],
+        "0000aaaLaaaL": [
+            "Herrings are red |~ Tuna are green",
+            "R&"
+        ],
+        "0000aaaLaaaR": [
+            " |~ Mackerel are yellow",
+            "R&"
+        ],
+        "0000aaaLaabL": [
+            " |~ Tuna are green",
+            "R&"
+        ],
+        "0000aaaLaabR": [
+            "Herrings are red |~ Mackerel are yellow",
+            "R&"
+        ],
+        "0000aaaR": [
+            "Salmon are Blue |~ ",
+            "Lv"
+        ],
+        "0000aabL": [
+            "Herrings are red |~ ",
+            "Lv"
+        ],
+        "0000aabR": [
+            "Salmon are Blue |~ (Tuna are green and Mackerel are yellow)",
+            "Lv"
+        ],
+        "0000aabRaaaL": [
+            "Salmon are Blue |~ Tuna are green",
+            "R&"
+        ],
+        "0000aabRaaaR": [
+            " |~ Mackerel are yellow",
+            "R&"
+        ],
+        "0000aabRaabL": [
+            " |~ Tuna are green",
+            "R&"
+        ],
+        "0000aabRaabR": [
+            "Salmon are Blue |~ Mackerel are yellow",
+            "R&"
+        ]
+    }
+]

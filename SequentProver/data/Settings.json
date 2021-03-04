@@ -1,0 +1,16 @@
+{
+    "Sequent Rules": {
+        "L->": "Add",
+        "R->": "Mult",
+        "L&": "Mult",
+        "R&": "Add",
+        "Lv": "Add",
+        "Rv": "Mult",
+        "L~": "Neg",
+        "R~": "Neg"
+    },
+    "Contraction": false,
+    "Reflexivity": true,
+    "Input File": "/Users/adrian.mac/bin/MaterialInference/SequentProver/data/Presets/Input/DefaultSequents.txt",
+    "Output File": "2021-03-03-14-16-03.json"
+}

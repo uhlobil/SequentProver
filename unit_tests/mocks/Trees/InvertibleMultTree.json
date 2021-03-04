@@ -1,0 +1,14 @@
+{
+    "0000": [
+        "(Tweety is a bird and Sylvester is a cat) |~ (Tom is a dog or Tom is an owl)",
+        "Root"
+    ],
+    "0000000M": [
+        "Tweety is a bird, Sylvester is a cat |~ (Tom is a dog or Tom is an owl)",
+        "L&"
+    ],
+    "0000000M000M": [
+        "Tweety is a bird, Sylvester is a cat |~ Tom is a dog, Tom is an owl",
+        "Rv"
+    ]
+}

@@ -1,0 +1,16 @@
+{
+    "Sequent Rules": {
+        "L->": "Add",
+        "R->": "Mult",
+        "L&": "Mult",
+        "R&": "Add",
+        "Lv": "Add",
+        "Rv": "Mult",
+        "L~": "Neg",
+        "R~": "Neg"
+    },
+    "Contraction": true,
+    "Reflexivity": true,
+    "Input File": "Not Yet Configured",
+    "Output File": "Not Yet Configured"
+}
