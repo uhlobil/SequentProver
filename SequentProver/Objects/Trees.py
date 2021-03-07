@@ -3,8 +3,8 @@ from itertools import product
 from typing import Union
 
 from Adapters.Converters import String
-from Objects.Sequents import Sequent
 from Controllers.Settings import Settings
+from Objects.Sequents import Sequent
 
 
 class Tree(MutableMapping):

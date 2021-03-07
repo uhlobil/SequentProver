@@ -3,8 +3,7 @@ import os
 
 from Controllers.Settings import Settings
 
-
-_preset_path = os.path.join('SequentProver', 'data', 'Presets', 'Rules')
+_preset_path = os.path.join(os.path.dirname(__file__), "..", "data", "Presets", "Rules")
 _sides = {"L", "R"}
 _connectives = {"->", "&", "v"}
 

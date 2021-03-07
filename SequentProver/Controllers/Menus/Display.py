@@ -5,9 +5,12 @@ from Controllers.Menus.Base import Menu, confirm_menu
 from View.DisplayTrees import display
 
 
+_current_dir = os.path.dirname(__file__)
+
+
 class ViewRuns(Menu):
     """Menu for selecting which Runs file to view."""
-    path = os.path.join("SequentProver", "data", "Runs")
+    path = os.path.join(_current_dir, "..", "..", "data", "Runs")
     confirm_msg = "This will delete all previously saved runs. \n" \
                   "This action cannot be undone."
 
@@ -22,7 +25,7 @@ class ViewRuns(Menu):
             self.cleanup()
         else:
             file = self.options[selection - 1]
-            file_path = os.path.join(self.path, f"{file}")
+            file_path = os.path.join(self.path, file)
             ViewTree(file_path).open()
 
     def cleanup(self):

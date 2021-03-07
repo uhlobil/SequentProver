@@ -11,6 +11,6 @@
     },
     "Contraction": false,
     "Reflexivity": true,
-    "Input File": "/Users/adrian.mac/bin/MaterialInference/SequentProver/data/Presets/Input/DefaultSequents.txt",
-    "Output File": "2021-03-03-14-16-03.json"
+    "Input File": "/Users/adrian.mac/Projects/MaterialInference/SequentProver/data/Presets/Input/DefaultSequents.txt",
+    "Output File": "2021-03-07-15-20-43.json"
 }

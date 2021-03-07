@@ -4,14 +4,14 @@ import shutil
 from Controllers.Menus.Main import MainMenu
 from Controllers.Rules import Settings
 
-
-data_path = os.path.join("SequentProver", "data")
-ftue_path = os.path.join(data_path, "Presets", "FTUE")
-untracked_src_files = ("Atoms.json", "Names.json", "Settings.json")
+_main_dir = os.path.dirname(__file__)
+_data_path = os.path.join(_main_dir, "data")
+_ftue_path = os.path.join(_data_path, "Presets", "FTUE")
+_untracked_src_files = ("Atoms.json", "Names.json", "Settings.json")
 
 
 def main():
-    for file in untracked_src_files:
+    for file in _untracked_src_files:
         _initialize_file(file)
     _initialize_runs()
     Settings().update_output_file()
@@ -19,14 +19,14 @@ def main():
 
 
 def _initialize_file(file_name):
-    file_path = os.path.join(data_path, file_name)
+    file_path = os.path.join(_data_path, file_name)
     if not os.path.exists(file_path):
-        ftue_file = os.path.join(ftue_path, file_name)
+        ftue_file = os.path.join(_ftue_path, file_name)
         shutil.copy(ftue_file, file_path)
 
 
 def _initialize_runs():
-    runs_dir = os.path.join(data_path, "Runs")
+    runs_dir = os.path.join(_data_path, "Runs")
     if not os.path.exists(runs_dir):
         os.makedirs(runs_dir)
 
@@ -49,20 +49,6 @@ Key:
     Debt -> Quality of life changes that make the code faster, easier 
 to read, etc. Usually a result of learning something new.
     Features -> Features to be implemented.
-
-Feature: Names of objects in the language
-    - Prerequisite: in data we create a Names.json file containing the
-    names of the objects in the language. There are 2 sets of (possibly
-    overlapping) names (per dan note 118, p.10):
-        - Additive: additive variables, valid for substitution in left
-        existential and right universal quantifiers
-        - Multiplicative: multiplicative variables, valid for 
-        substitution in left universal and right existential 
-        quantifiers.
-    - There is an option in the main menu to add a name to one or both
-    of these sets. 
-    - There is an adequate explanation (somewhere) for what makes a 
-    name suitable for inclusion in one or more sets.
 
 Feature: Decomposition of Quantified Sequents
     - Prerequisite: a list (or whatever) containing each name in the 

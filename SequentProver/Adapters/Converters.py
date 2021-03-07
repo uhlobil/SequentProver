@@ -13,8 +13,9 @@ proposition instead.
 
 from typing import Iterator
 
+from Objects.Propositions import Proposition, Atom, \
+    Conditional, Conjunction, Disjunction, Negation
 from Objects.Sequents import Sequent
-from Objects.Propositions import Proposition, Atom, Conditional, Conjunction, Disjunction, Negation
 
 connectives = {
     "implies": Conditional,

@@ -8,6 +8,8 @@ from Objects.Propositions import Proposition
 from Objects.Sequents import Sequent
 from Objects.Trees import Tree
 
+_current_path = os.path.dirname(__file__)
+
 
 class Import:
     def __init__(self, file_path):
@@ -46,8 +48,9 @@ connectives = ["if", "and", "or", "not"]
 
 
 class Export:
-    runs_file = os.path.join("SequentProver", "data", "Runs", Settings()["Output File"])
-    atoms_file = os.path.join("SequentProver", "data", "Atoms.json")
+    runs_file = os.path.join(_current_path, "..", "data",
+                             "Runs", Settings()["Output File"])
+    atoms_file = os.path.join(_current_path, "..", "data", "Atoms.json")
 
     def __init__(self, data):
         self.data = data
@@ -55,7 +58,8 @@ class Export:
     def to_runs(self):
         str_forest = {}
         for tree in self.data:
-            tree_dict = {str(key): str(sequent) for key, sequent in tree.items()}
+            tree_dict = {str(key): str(sequent)
+                         for key, sequent in tree.items()}
             str_forest.update({str(tree.root): tree_dict})
         with open(self.runs_file, "w") as file:
             file.write(json.dumps(str_forest, indent=4))
@@ -64,7 +68,8 @@ class Export:
         with open(self.atoms_file, "r") as file:
             atoms = set(json.load(file))
         for tree in self.data:
-            atomic_sequents = [str(sequent) for sequent in tree.values() if sequent.complexity == 0]
+            atomic_sequents = [str(sequent) for sequent in tree.values()
+                               if sequent.complexity == 0]
             atoms.update(atomic_sequents)
         with open(self.atoms_file, "w") as file:
             file.write(json.dumps(list(atoms), indent=4))
@@ -74,7 +79,8 @@ class Decompose:
 
     def __init__(self, file_path):
         self.file_path: str = file_path
-        self.data: list = [sequent for sequent in Import(file_path).sequents()]
+        self.data: list = [sequent
+                           for sequent in Import(file_path).sequents()]
 
     def sequents(self):
         forest = []
