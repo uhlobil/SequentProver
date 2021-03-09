@@ -51,12 +51,13 @@ to read, etc. Usually a result of learning something new.
     Features -> Features to be implemented.
 
 Feature: Decomposition of Quantified Sequents
-    - Prerequisite: a list (or whatever) containing each name in the 
-    language (each name ever used). Users can define new names as they 
-    please in the main menu, but not during decomposition (as that 
-    might result in incomplete trees).
+    - [x] Prerequisite: a list (or whatever) containing each name in 
+    the language (each name ever used). Users can define new names as
+    they please in the main menu, but not during decomposition (as that 
+    might result in incomplete trees). 
     - Universals: 
-        - Input string: "Forall(x)(Proposition(x))" 
+        - Input string: "Forall(x)(Proposition(x))", 
+        "Forall(x)(Forall(y)(Proposition(x,y)))" 
             - Risks: We need to make sure that the string-to-prop
             converter doesn't get tripped up by this, as there are 
             three sets of parentheses. We probably want a set around 
@@ -64,14 +65,14 @@ Feature: Decomposition of Quantified Sequents
             string, then seek the next set of parentheses and find each
             instance of the variable inside those (maybe including the 
             parentheses themselves). 
-        - Output proposition: Universal([var], [Proposition(var)])
+        - Output proposition: Universal(Proposition, ([var]))
         where [var] is some procedurally generated unique (per root)
         string that marks each variable bound by the quantifier.
             - Risks: There's room for error when creating identifiers
             and replacing parts of strings with them, especially with 
             the current conversion converting propositions from the
             inside out, so to speak. 
-        - Decomposition_backup: 
+        - Decomposition: 
             - Left: User picks a name %N in Names.Multiplicative such 
             that Universal(var, Proposition([var])) becomes 
             Proposition([%N/var])

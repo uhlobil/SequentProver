@@ -13,8 +13,8 @@ proposition instead.
 
 from typing import Iterator
 
-from Objects.Propositions import Proposition, Atom, \
-    Conditional, Conjunction, Disjunction, Negation
+from Objects.Propositions.Propositions import Proposition, Atom, \
+    Conditional, Conjunction, Disjunction, Negation, Formula
 from Objects.Sequents import Sequent
 
 connectives = {
@@ -62,7 +62,10 @@ class String:
             raise TypeError(f"{self.data} must be a Proposition, not Sequent")
         self._deparen()
         if self.is_atomic:
-            return Atom(self.data)
+            if "(" in self.data or ")" in self.data:
+                return self._formula()
+            else:
+                return Atom(self.data)
         return self._proposition()
 
     def _proposition(self) -> Proposition:
@@ -105,6 +108,10 @@ class String:
         except IndexError:
             return
 
+    def _formula(self):
+        wff, variables = _formula_fields(self.data)
+        return Formula(wff, variables)
+
 
 def _letter_degree(letter) -> int:
     """Returns degree of parentheses nesting for letters."""
@@ -128,3 +135,13 @@ def _convert_list(cedent: list) -> Iterator[Proposition]:
     """Generates converted propositions (from strings)."""
     for string in cedent:
         yield String(string).to_proposition()
+
+
+def _formula_fields(string):
+    for i, letter in enumerate(string):
+        if letter == "(":
+            wff = string[:i]
+            var_string = string[i:].strip("()")
+            variables = var_string.split(", ")
+            return wff, variables
+    raise RuntimeError("{string} has not been formatted correctly.")

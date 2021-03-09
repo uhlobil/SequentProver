@@ -27,6 +27,7 @@ import itertools
 from collections import namedtuple
 from typing import Sequence, Any, Generator
 
+import Objects.Propositions.Decomposables
 from Objects import Propositions
 
 principal = namedtuple('principal', 'side, index, proposition')
@@ -102,7 +103,7 @@ class Sequent:
             raise AttributeError(f"{self.__repr__} is atomic.")
         if self._principal is None:
             attributes = self._get_principal()
-            proposition = Propositions.create(attributes)
+            proposition = Objects.Propositions.Decomposables.create(attributes)
             self._principal = principal(attributes.side, attributes.index, proposition)
         return self._principal
 
