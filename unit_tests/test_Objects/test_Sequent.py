@@ -1,46 +1,112 @@
 import unittest
 
-from SequentProver.Objects.Propositions import Conditional
-from SequentProver.Objects.Propositions import Conjunction
-from SequentProver.Objects.Propositions import Disjunction
-from SequentProver.Objects.Propositions import Atom
-from SequentProver.Objects.Propositions import Negation
+from Controllers import Rules
+from Controllers.Settings import Settings
 from Objects.Sequents import Sequent
+from Propositions.Converters import String
+from Propositions.Propositions import Atom, Conjunction, Conditional, Disjunction, Negation
 
 
 class TestSequent(unittest.TestCase):
-    atom_prop = Atom('Prop')
-    neg_prop = Negation(atom_prop)
-    cond_prop = Conditional(atom_prop, atom_prop)
-    conj_prop = Conjunction(atom_prop, atom_prop)
-    disj_prop = Disjunction(atom_prop, atom_prop)
-    test_atom_seq = Sequent([atom_prop], [atom_prop])
 
-    def test_init(self):
-        self.assertIsInstance(self.test_atom_seq, Sequent)
+    def test_string_to_sequent(self):
+        string = "Predicate(alpha), (Relation(alpha; beta) and Relation(beta; delta)) " \
+                 "|~ (Relation(beta; gamma) implies Predicate(delta)), Predicate(delta) or Predicate(zeta)"
+        sequent = String(string).to_sequent()
+        self.assertEqual(
+            Sequent(
+                [
+                    Atom("Predicate", ("alpha",)),
+                    Conjunction(
+                        Atom("Relation", ("alpha", "beta")),
+                        Atom("Relation", ("beta", "delta"))
+                    )
+                ],
+                [
+                    Conditional(
+                        Atom("Relation", ("beta", "gamma")),
+                        Atom("Predicate", ("delta",))
+                    ),
+                    Disjunction(
+                        Atom("Predicate", ("delta",)),
+                        Atom("Predicate", ("zeta",))
+                    )
+                ]
+            ),
+            sequent
+        )
 
-    def test_repr(self):
-        test_repr = self.test_atom_seq.__repr__()
-        expected = 'Sequent([Atom(Prop)], [Atom(Prop)])'
-        self.assertEqual(test_repr, expected)
 
-    def test_str(self):
-        test_str = self.test_atom_seq.__str__()
-        expected = 'Prop |~ Prop'
-        self.assertEqual(test_str, expected)
+class TestInvertibleDecomp(unittest.TestCase):
+    rules = {k: v for k, v in Settings()["Sequent Rules"].items()}
+    alpha = Atom("Predicate", ("alpha",))
+    beta = Atom("Predicate", ("beta",))
 
-    def test_complexity(self):
-        test_seqs = [
-            self.test_atom_seq,
-            Sequent([self.neg_prop, self.cond_prop], [self.disj_prop, self.atom_prop])
-        ]
-        expected = [0, 3]
-        for i, sequent in enumerate(test_seqs):
-            self.assertEqual(sequent.complexity, expected[i])
+    def setUp(self) -> None:
+        Rules.change_multiple("", "Invertible")
 
-    def test_is_reflexive(self):
-        self.assertTrue(self.test_atom_seq.is_reflexive)
-        self.assertFalse(Sequent([self.neg_prop, self.cond_prop], [self.disj_prop, self.atom_prop]).is_reflexive)
+    def tearDown(self) -> None:
+        for k, v in self.rules.items():
+            Settings()["Sequent Rules"][k] = v
+
+    def test_inv_left_conditional(self):
+        """Predicate(alpha) implies Predicate(beta) |~ """
+
+        sequent = Sequent([Conditional(self.alpha, self.beta)], [])
+        decomp = sequent.decompose()[0]
+        self.assertEqual(Sequent([], [self.alpha]), decomp[0])
+        self.assertEqual(Sequent([self.beta], []), decomp[1])
+
+    def test_inv_right_conditional(self):
+        """|~ Predicate(alpha) implies Predicate(beta)"""
+
+        sequent = Sequent([], [Conditional(self.alpha, self.beta)])
+        decomp = sequent.decompose()[0][0]
+        self.assertEqual(Sequent([self.alpha], [self.beta]), decomp)
+
+    def test_inv_left_conjunction(self):
+        """Predicate(alpha) and Predicate(beta) |~"""
+
+        sequent = Sequent([Conjunction(self.alpha, self.beta)], [])
+        decomp = sequent.decompose()[0][0]
+        self.assertEqual(Sequent([self.alpha, self.beta], []), decomp)
+
+    def test_inv_right_conjunction(self):
+        """|~ Predicate(alpha) and Predicate(beta)"""
+
+        sequent = Sequent([], [Conjunction(self.alpha, self.beta)])
+        decomp = sequent.decompose()[0]
+        self.assertEqual(Sequent([], [self.alpha]), decomp[0])
+        self.assertEqual(Sequent([], [self.beta]), decomp[1])
+
+    def test_inv_left_disjunction(self):
+        """Predicate(alpha) or Predicate(beta) |~"""
+
+        sequent = Sequent([Disjunction(self.alpha, self.beta)], [])
+        decomp = sequent.decompose()[0]
+        self.assertEqual(Sequent([self.alpha], []), decomp[0])
+        self.assertEqual(Sequent([self.beta], []), decomp[1])
+
+    def test_inv_right_disjunction(self):
+        """|~ Predicate(alpha) or Predicate(beta)"""
+
+        sequent = Sequent([], [Disjunction(self.alpha, self.beta)])
+        decomp = sequent.decompose()[0][0]
+        self.assertEqual(Sequent([], [self.alpha, self.beta]), decomp)
+
+    def test_inv_left_negation(self):
+        """not Predicate(alpha) |~"""
+
+        sequent = Sequent([Negation(self.alpha)], [])
+        decomp = sequent.decompose()[0][0]
+        self.assertEqual(Sequent([], [self.alpha]), decomp)
+
+    def test_inv_right_negation(self):
+        """|~ not Predicate(alpha)"""
+
+        sequent = Sequent([], [Negation(self.alpha)])
+        decomp = sequent.decompose()[0][0]
+        self.assertEqual(Sequent([self.alpha], []), decomp)
 
 
 if __name__ == '__main__':

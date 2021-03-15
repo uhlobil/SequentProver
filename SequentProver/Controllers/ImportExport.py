@@ -2,9 +2,9 @@ import json
 import os
 from typing import Iterator
 
-from Adapters.Converters import String
+from Propositions.Converters import String
 from Controllers.Settings import Settings
-from Objects.Propositions import Proposition
+from Propositions.BaseClasses import Proposition
 from Objects.Sequents import Sequent
 from Objects.Trees import Tree
 
@@ -79,8 +79,7 @@ class Decompose:
 
     def __init__(self, file_path):
         self.file_path: str = file_path
-        self.data: list = [sequent
-                           for sequent in Import(file_path).sequents()]
+        self.data: list = [sequent for sequent in Import(file_path).sequents()]
 
     def sequents(self):
         forest = []

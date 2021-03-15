@@ -11,10 +11,7 @@ Convert(_your_string_).to_proposition() turns the string into a
 proposition instead.
 """
 
-from typing import Iterator
-
-from Objects.Propositions.Propositions import Proposition, Atom, \
-    Conditional, Conjunction, Disjunction, Negation, Formula
+from Propositions.Propositions import Conditional, Conjunction, Disjunction, Negation, Atom
 from Objects.Sequents import Sequent
 
 connectives = {
@@ -31,6 +28,9 @@ class String:
             raise TypeError(f"Input {data} must be a string.")
         self.data = data
         self._is_atomic = None
+
+    def __repr__(self) -> str:
+        return self.data
 
     @property
     def is_atomic(self):
@@ -56,19 +56,22 @@ class String:
         except IndexError:
             raise TypeError(f"{self.data} must be a sequent.")
 
-    def to_proposition(self) -> Proposition:
+    def to_proposition(self):
         """Returns a proposition from the input."""
         if ' |~ ' in self.data:
             raise TypeError(f"{self.data} must be a Proposition, not Sequent")
         self._deparen()
         if self.is_atomic:
-            if "(" in self.data or ")" in self.data:
-                return self._formula()
-            else:
-                return Atom(self.data)
+            return self._atom()
         return self._proposition()
 
-    def _proposition(self) -> Proposition:
+    def _atom(self):
+        if "(" not in self.data:
+            return Atom(self.data)
+        prop, names = self.data[:-1].split("(")
+        return Atom(prop, names.split(", "))
+
+    def _proposition(self):
         """Gets the type and location of the main connective."""
         degree = 0
         for index, word in enumerate(self.data.split(' ')):
@@ -76,7 +79,7 @@ class String:
             if degree == 0 and word in connectives.keys():
                 return self._create(word, index)
 
-    def _create(self, connective, index) -> Proposition:
+    def _create(self, connective, index):
         """Creates a proposition of input connective's type with the
          contents of self.data. self.data is converted as well, making
          this as recursive as it needs to be."""
@@ -89,8 +92,8 @@ class String:
         else:
             left_string: str = " ".join(prop_list[:index])
             right_string: str = " ".join(prop_list[index + 1:])
-            left: Proposition = String(left_string).to_proposition()
-            right: Proposition = String(right_string).to_proposition()
+            left = String(left_string).to_proposition()
+            right = String(right_string).to_proposition()
             return proposition(left, right)
 
     def _deparen(self):
@@ -107,10 +110,6 @@ class String:
                     self.data = self.data[1:-1]
         except IndexError:
             return
-
-    def _formula(self):
-        wff, variables = _formula_fields(self.data)
-        return Formula(wff, variables)
 
 
 def _letter_degree(letter) -> int:
@@ -131,17 +130,12 @@ def _word_degree(word) -> int:
     return degree
 
 
-def _convert_list(cedent: list) -> Iterator[Proposition]:
+def _convert_list(cedent: list):
     """Generates converted propositions (from strings)."""
     for string in cedent:
         yield String(string).to_proposition()
 
 
-def _formula_fields(string):
-    for i, letter in enumerate(string):
-        if letter == "(":
-            wff = string[:i]
-            var_string = string[i:].strip("()")
-            variables = var_string.split(", ")
-            return wff, variables
-    raise RuntimeError("{string} has not been formatted correctly.")
+def _variables():
+    for letter in map(chr, range(97, 123)):
+        yield letter

@@ -24,17 +24,17 @@ def change_structure(rule):
 
 def change_multiple(rule, mode):
     if mode == "Reverse":
-        rules = [r for r in _rules() if (r[0] == rule or r[1:] == rule)]
-        for r in rules:
+        rule_list = [r for r in rules() if (r[0] == rule or r[1:] == rule)]
+        for r in rule_list:
             change_single(r)
     else:
         preset = _load_preset(mode)
-        rules = []
+        rule_list = []
         if rule:
-            rules = [r for r in _rules() if (r[0] == rule or r[1:] == rule)]
+            rule_list = [r for r in rules() if (r[0] == rule or r[1:] == rule)]
         else:
-            rules = [r for r in _rules()]
-        for r in rules:
+            rule_list = [r for r in rules()]
+        for r in rule_list:
             Settings()["Sequent Rules"][r] = preset[r]
 
 
@@ -45,7 +45,7 @@ def _load_preset(preset_name: str) -> dict:
         return json.load(file)
 
 
-def _rules():
+def rules():
     """Generates strings corresponding to the rules in Settings()."""
     for side in _sides:
         for connective in _connectives:

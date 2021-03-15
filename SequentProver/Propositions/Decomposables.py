@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 from Controllers.Settings import Settings
-from Objects.Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction
+from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction
 
 unit = namedtuple('unit', 'ant, con')
 
@@ -211,7 +211,7 @@ def _create_conditional(left, right, side):
 
 def _create_negation(proposition, side):
     """Returns a decomposable negation based on inputs."""
-    contents = proposition.prop
+    contents = proposition._prop
     if side == "ant":
         return LeftNegation(contents)
     else:

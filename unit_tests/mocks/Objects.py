@@ -1,10 +1,10 @@
 import os
 import json
-from Objects.Propositions import Atom
-from Objects.Propositions import Negation
-from Objects.Propositions import Conditional
-from Objects.Propositions import Conjunction
-from Objects.Propositions import Disjunction
+from Propositions import Atom
+from Propositions import Negation
+from Propositions import Conditional
+from Propositions import Conjunction
+from Propositions import Disjunction
 from Objects.Sequents import Sequent
 
 # Propositions

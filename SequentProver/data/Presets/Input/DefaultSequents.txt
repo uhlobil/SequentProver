@@ -1,8 +1,8 @@
-Socrates is human |~ Socrates is mortal
-(Tweety is a bird and Sylvester is a cat) |~ (Tom is a dog or Tom is an owl)
-(Herrings are red or Salmon are Blue) |~ (Tuna are green and Mackerel are yellow)
+human(Socrates) |~ mortal(Socrates)
+(bird(Tweety) and cat(Sylvester)) |~ (dog(Tom) or snake(Jerry))
+(red(herrings) or blue(salmon)) |~ (green(tuna) and yellow(mackerel))
 (Eight twenties implies Four forties) |~ (Three times five implies Five times Three)
-(not Aristotle eats lemons) |~ (not Alexander conquers Scotland)
+(not eats(Aristotle; lemons)) |~ (not conquers(Alexander; Scotland))
 (Disks or Quetzals), (not (Quetzals or Harmans)) |~ (not (Harmans and Disks))
 (Left Conjunct and Right Conjunct) |~ (Left Conjunct and Right Conjunct)
 (Left Disjunct or Right Disjunct) |~ (Left Disjunct or Right Disjunct)

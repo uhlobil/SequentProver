@@ -25,10 +25,10 @@ have its .decompose() called.
 
 import itertools
 from collections import namedtuple
-from typing import Sequence, Any, Generator
+from typing import Sequence, Any, Generator, Union
 
-import Objects.Propositions.Decomposables
-from Objects import Propositions
+import Propositions.Decomposables
+import Propositions
 
 principal = namedtuple('principal', 'side, index, proposition')
 
@@ -52,7 +52,8 @@ class Sequent:
     def __repr__(self) -> str:
         return f"Sequent({self.ant}, {self.con})"
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Converts self to string."""
         antecedent = [str(prop) for prop in self.ant]
         consequent = [str(prop) for prop in self.con]
         ant_string = ', '.join(antecedent)
@@ -60,8 +61,7 @@ class Sequent:
         return f'{ant_string} |~ {con_string}'
 
     def __bool__(self) -> bool:
-        """Effectively checks whether the sequent is empty, i.e.
-        whether it is ' |~ '."""
+        """Return whether sequent is empty (i.e. " |~ ")."""
         if self.ant or self.con:
             return True
         return False
@@ -94,42 +94,60 @@ class Sequent:
         return self._complexity
 
     @property
-    def principal(self):
-        """The main proposition: (side, index, proposition), where
+    def principal(self) -> tuple:
+        """Return the principal proposition of this sequent.
+
+        The main proposition: (side, index, proposition), where
         side = 'ant' or 'con', index = n where n is its position in
-        side, proposition = a decomposable proposition (cf. DecompProp
-        and its subclasses in Propositions.py)."""
-        if self.complexity == 0:
-            raise AttributeError(f"{self.__repr__} is atomic.")
+        side, proposition = a decomposable proposition (cf.
+        Decomposables.py in Propositions)."""
         if self._principal is None:
             attributes = self._get_principal()
-            proposition = Objects.Propositions.Decomposables.create(attributes)
+            proposition = Propositions.Decomposables.create(attributes)
             self._principal = principal(attributes.side, attributes.index, proposition)
         return self._principal
 
     @property
-    def is_reflexive(self):
+    def is_reflexive(self) -> bool:
         """Whether this sequent is reflexive."""
         if self._is_reflexive is None:
             self._is_reflexive = self._get_reflexivity()
         return self._is_reflexive
 
     def decompose(self):
-        """Returns a tuple of tuples of sequents resulting from
-        decomposition of this sequent. Each result in self._recombine()
-        is a tuple of sequents which corresponds to one possible way to
-        decompose that sequent (relevant only for non-invertible
-        sequents), and these are all put together into a larger tuple
-        to keep cognates together.
+        """Return the result of decomposing this sequent.
 
-        One way to handle the results is:
+        Due to possible complexity, this ends up being a list of tuples
+        of sequents. Each result in self._recombine() is a tuple of
+        sequents which corresponds to one possible way to decompose
+        that sequent (relevant only for non-invertible sequents), and
+        these are all put together into a larger tuple to keep cognates
+        together.
 
-        results: tuple = Sequent.decompose()
-        for dimension: tuple in results:
-            for sequent: Sequent in dimension:
-                ...
+        For example:
 
+        >>> results: list = Sequent.decompose()
+        >>> dimension: tuple                # invertible decompositions have only one dimension
+        >>> for dimension in results:       # non-invertible decompositions may have any number
+        >>>    sequent: Sequent
+        >>>    for sequent in dimension:    # the actual child sequents (left, right, or middle)
+        >>>         print(sequent)
+
+        If you're guaranteed to get invertible sequents only, you might
+        desire something like the following, where the results[0] is
+        the left or only (middle) result, and results[1] is the right
+        result (or does not exist):
+
+        >>> results: tuple = Sequent.decompose()[0]
+        >>> if len(results) == 1:   # single parent decomposition
+        >>>     child = results[0]
+        >>>     print(f"Child sequent is: {child}")
+        >>> else:                   # if len(results) == 2
+        >>>     left = results[0]
+        >>>     right = results[1]
+        >>>     print(f"Left child is: {left}. Right child is: {right}")
         """
+
         units: tuple = self.principal.proposition.decompose()
         templates: Sequent = self._templates()
         result = [r for r in self._recombine(units, templates)]

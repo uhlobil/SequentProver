@@ -2,7 +2,7 @@ from collections.abc import MutableMapping
 from itertools import product
 from typing import Union
 
-from Adapters.Converters import String
+from Propositions.Converters import String
 from Controllers.Settings import Settings
 from Objects.Sequents import Sequent
 
@@ -123,5 +123,3 @@ def generate_cognates():
     aaa to zzz in order."""
     for i in product(map(chr, range(97, 123)), repeat=3):
         yield ''.join(i)
-
-
