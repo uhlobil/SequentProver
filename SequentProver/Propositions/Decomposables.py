@@ -1,7 +1,8 @@
 from collections import namedtuple
 
+from Controllers.Menus.Decomposition import MultiplicativeNameMenu
 from Controllers.Settings import Settings
-from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction
+from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction, Universal
 
 unit = namedtuple('unit', 'ant, con')
 
@@ -52,52 +53,100 @@ class RightDecomp(DecompProp):
         super().decompose()
 
 
-class LeftNegation(Negation, LeftDecomp):
+class LeftNegation(Negation):
     """Contains rules for decomposing left negations."""
-    is_invertible = True
-    is_explosive = False
+
+    side = "L"
 
     def __init__(self, prop):
         super(Negation, self).__init__(prop)
-        super(LeftDecomp, self).__init__()
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        return True
+
+    @property
+    def is_explosive(self):
+        return False
 
     def decompose(self) -> tuple:
         return unit([], [self.prop]),
 
 
-class RightNegation(Negation, RightDecomp):
+class RightNegation(Negation):
     """Contains rules for decomposing right negations."""
-    is_invertible = True
-    is_explosive = False
+
+    side = "R"
 
     def __init__(self, prop):
         super(Negation, self).__init__(prop)
-        super(RightDecomp, self).__init__()
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        return True
+
+    @property
+    def is_explosive(self):
+        return False
 
     def decompose(self) -> tuple:
         return unit([self.prop], []),
 
 
-class LeftConditional(Conditional, LeftDecomp):
+class LeftConditional(Conditional):
     """Contains rules for decomposing left conditionals."""
+
+    side = "L"
 
     def __init__(self, left, right):
         super(Conditional, self).__init__(left, right)
-        super(LeftDecomp, self).__init__()
-        self._check_explosivity_invertibility()
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        if self.rule == "Add":
+            return True
+        elif self.rule == "Mult":
+            return False
+        else:
+            raise RuntimeError("L-> rule set to an invalid value.")
+
+    @property
+    def is_explosive(self):
+        if self.rule == "Add":
+            return False
+        elif self.rule == "Mult":
+            return True
+        else:
+            raise RuntimeError("L-> rule set to invalid value.")
 
     def decompose(self) -> tuple:
         return unit([], [self.left]), unit([self.right], [])
 
 
-class RightConditional(Conditional, RightDecomp):
+class RightConditional(Conditional):
     """Contains rules for decomposing right conditionals."""
-    is_explosive = False
+
+    side = "R"
 
     def __init__(self, left, right):
         super(Conditional, self).__init__(left, right)
-        super(RightDecomp, self).__init__()
-        self._check_invertibility()
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        if self.rule == "Add":
+            return False
+        elif self.rule == "Mult":
+            return True
+        else:
+            raise RuntimeError("R-> rule set to an invalid value.")
+
+    @property
+    def is_explosive(self):
+        return False
 
     def decompose(self) -> tuple:
         if self.rule == "Add":
@@ -106,14 +155,27 @@ class RightConditional(Conditional, RightDecomp):
             return unit([self.left], [self.right]),
 
 
-class LeftConjunction(Conjunction, LeftDecomp):
+class LeftConjunction(Conjunction):
     """Contains rules for decomposing left Conjunctions."""
-    is_explosive = False
+
+    side = "L"
 
     def __init__(self, left, right):
         super(Conjunction, self).__init__(left, right)
-        super(LeftDecomp, self).__init__()
-        self._check_invertibility()
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        if self.rule == "Add":
+            return False
+        elif self.rule == "Mult":
+            return True
+        else:
+            raise RuntimeError("L& rule set to an invalid value.")
+
+    @property
+    def is_explosive(self):
+        return False
 
     def decompose(self) -> tuple:
         if self.rule == "Add":
@@ -122,38 +184,89 @@ class LeftConjunction(Conjunction, LeftDecomp):
             return unit([self.left, self.right], []),
 
 
-class RightConjunction(Conjunction, RightDecomp):
+class RightConjunction(Conjunction):
     """Contains rules for decomposing right Conjunctions."""
+
+    side = "R"
 
     def __init__(self, left, right):
         super(Conjunction, self).__init__(left, right)
-        super(RightDecomp, self).__init__()
-        self._check_explosivity_invertibility()
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        if self.rule == "Add":
+            return True
+        elif self.rule == "Mult":
+            return False
+        else:
+            raise RuntimeError("R& rule set to invalid value.")
+
+    @property
+    def is_explosive(self):
+        if self.rule == "Add":
+            return False
+        elif self.rule == "Mult":
+            return True
+        else:
+            raise RuntimeError("R& rule set to invalid value.")
 
     def decompose(self) -> tuple:
         return unit([], [self.left]), unit([], [self.right])
 
 
-class LeftDisjunction(Disjunction, LeftDecomp):
+class LeftDisjunction(Disjunction):
     """Contains rules for decomposing left disjunctions."""
+
+    side = "L"
 
     def __init__(self, left, right):
         super(Disjunction, self).__init__(left, right)
-        super(LeftDecomp, self).__init__()
-        self._check_explosivity_invertibility()
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        if self.rule == "Add":
+            return True
+        elif self.rule == "Mult":
+            return False
+        else:
+            raise RuntimeError("Lv rule set to invalid value.")
+
+    @property
+    def is_explosive(self):
+        if self.rule == "Add":
+            return False
+        if self.rule == "Mult":
+            return True
+        else:
+            raise RuntimeError("Lv rule set to invalid value.")
 
     def decompose(self) -> tuple:
         return unit([self.left], []), unit([self.right], [])
 
 
-class RightDisjunction(Disjunction, RightDecomp):
+class RightDisjunction(Disjunction):
     """Contains rules for decomposing right disjunctions"""
-    is_explosive = False
+
+    side = "R"
 
     def __init__(self, left, right):
         super(Disjunction, self).__init__(left, right)
-        super(RightDecomp, self).__init__()
-        self._check_invertibility()
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        if self.rule == "Add":
+            return False
+        elif self.rule == "Mult":
+            return True
+        else:
+            raise RuntimeError("Rv rule set to invalid value.")
+
+    @property
+    def is_explosive(self):
+        return False
 
     def decompose(self) -> tuple:
         if self.rule == "Add":
@@ -162,15 +275,52 @@ class RightDisjunction(Disjunction, RightDecomp):
             return unit([], [self.left, self.right]),
 
 
+class LeftUniversal(Universal):
+    """Contains rules for decomposing left universals."""
+
+    side = "L"
+
+    def __init__(self, var, prop):
+        super(Universal, self).__init__(var, prop)
+        self.rule = Settings().get_rule(self.side + self.symbol)
+
+    @property
+    def is_invertible(self):
+        return False
+
+    @property
+    def is_explosive(self):
+        return True
+
+    def decompose(self) -> tuple:
+        name = MultiplicativeNameMenu().get()
+        prop = self.instantiate(self.var, name)
+        return unit([prop], []),
+
+
+class RightUniversal(Universal):
+    pass
+
+
 def create(attributes):
     """Returns the decomposable proposition based on the input attributes."""
     proposition = attributes.proposition
     symbol = proposition.symbol
     side = attributes.side
     if attributes.proposition.arity == 1:
-        return _create_negation(proposition, side)
+        return _create_unary_prop(proposition, side, symbol)
     else:
         return _create_binary_prop(proposition, side, symbol)
+
+
+def _create_unary_prop(proposition, side, symbol):
+    """Return the relevant unary decomposable proposition."""
+    if symbol == "~":
+        return _create_negation(proposition, side)
+    elif symbol == "forall":
+        return _create_universal(proposition, side)
+    elif symbol == "exists":
+        return _create_existential(proposition, side)
 
 
 def _create_binary_prop(proposition, side, symbol):
@@ -211,8 +361,22 @@ def _create_conditional(left, right, side):
 
 def _create_negation(proposition, side):
     """Returns a decomposable negation based on inputs."""
-    contents = proposition._prop
+    contents = proposition.prop
     if side == "ant":
         return LeftNegation(contents)
     else:
         return RightNegation(contents)
+
+
+def _create_universal(proposition, side):
+    """Return a decomposable Universal."""
+    prop = proposition.prop
+    var = proposition.var
+    if side == "ant":
+        return LeftUniversal(var, prop)
+    elif side == "con":
+        return RightUniversal(var, prop)
+
+
+def _create_existential(proposition, side):
+    pass

@@ -11,7 +11,8 @@ Convert(_your_string_).to_proposition() turns the string into a
 proposition instead.
 """
 
-from Propositions.Propositions import Conditional, Conjunction, Disjunction, Negation, Atom
+from Propositions.Propositions import Conditional, Conjunction, Disjunction, Negation
+from Propositions.BaseClasses import Atom
 from Objects.Sequents import Sequent
 
 connectives = {
@@ -69,7 +70,7 @@ class String:
         if "(" not in self.data:
             return Atom(self.data)
         prop, names = self.data[:-1].split("(")
-        return Atom(prop, names.split(", "))
+        return Atom(prop, names.split("; "))
 
     def _proposition(self):
         """Gets the type and location of the main connective."""

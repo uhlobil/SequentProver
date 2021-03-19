@@ -1,7 +1,8 @@
 import unittest
 
 from Propositions.Converters import String
-from Propositions.Propositions import Atom, Negation, Conditional, Conjunction, Disjunction
+from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction, Universal, Existential
+from Propositions.BaseClasses import Atom
 
 
 class TestAtoms(unittest.TestCase):
@@ -58,6 +59,43 @@ class TestBinary(unittest.TestCase):
             self.assertEqual(self.right, prop.right)
             self.assertEqual(string, str(prop))
             self.assertEqual(("alpha", "beta", "gamma"), prop.names)
+
+
+class TestQuantifiers(unittest.TestCase):
+    types = Universal, Existential
+    test_atom = Atom("Predicate", ("alpha", "x", "beta"))
+    result_atom = Atom("Predicate", ("alpha", "testname", "beta"))
+    unary = Negation,
+    binary = Conditional, Conjunction, Disjunction
+
+    def test_universal_init(self):
+        universal = Universal("x", self.test_atom)
+        self.assertEqual("x", universal.var)
+        self.assertEqual(self.test_atom, universal.prop)
+
+    def test_existential_init(self):
+        existential = Existential("x", self.test_atom)
+        self.assertEqual("x", existential.var)
+        self.assertEqual(self.test_atom, existential.prop)
+
+    def test_instantiate_atom(self):
+        universal = Universal("x", self.test_atom)
+        test = universal.instantiate(universal.var, "testname")
+        self.assertEqual(self.result_atom, test)
+
+    def test_instantiate_unary(self):
+        for c in self.unary:
+            universal = Universal("x", c(self.test_atom))
+            test = universal.instantiate(universal.var, "testname")
+            self.assertEqual(c(self.result_atom), test)
+
+    def test_instantiate_binary(self):
+        for c in self.binary:
+            universal = Universal("x", c(self.test_atom, self.test_atom))
+            test = universal.instantiate(universal.var, "testname")
+            self.assertEqual(c(self.result_atom, self.result_atom), test)
+
+
 
 
 if __name__ == '__main__':

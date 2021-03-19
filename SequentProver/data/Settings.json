@@ -7,7 +7,11 @@
         "Lv": "Add",
         "Rv": "Mult",
         "L~": "Neg",
-        "R~": "Neg"
+        "R~": "Neg",
+        "Lforall": "Mult",
+        "Rforall": "Add",
+        "Lexists": "Add",
+        "Rexists": "Mult"
     },
     "Contraction": false,
     "Reflexivity": true,
