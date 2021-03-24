@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from Controllers import Rules
 from Controllers.Settings import Settings
@@ -48,6 +49,7 @@ class TestSequent(unittest.TestCase):
 
     def test_sequent_right_universal_principal(self):
         self.assertTrue(False)
+
 
 class TestInvertibleDecomp(unittest.TestCase):
     rules = {k: v for k, v in Settings()["Sequent Rules"].items()}
@@ -123,9 +125,10 @@ class TestInvertibleDecomp(unittest.TestCase):
     def test_inv_left_universal(self):
         """forall(x)(Predicate(x))"""
 
-        sequent = Sequent([Universal("alpha", self.alpha)], [])
-        decomp = sequent.decompose()[0][0]
-        self.assertEqual(Sequent([Atom("Predicate", ("gamma",))], []), decomp)
+        with patch("builtins.input", lambda *args: 0):
+            sequent = Sequent([Universal("alpha", self.alpha)], [])
+            decomp = sequent.decompose()[0][0]
+            self.assertEqual(Sequent([Atom("Predicate", ("gamma",))], []), decomp)
 
 
 if __name__ == '__main__':

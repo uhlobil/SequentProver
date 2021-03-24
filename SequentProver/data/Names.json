@@ -1,13 +1,4 @@
-{
-    "Additive": [
-        "Adrian",
-        "Eve",
-        "Lady",
-        "Lazarus",
-        "Luros"
-    ],
-    "Multiplicative": [
-        "Adrian",
-        "Eve"
-    ]
-}
+[
+    "Adrian",
+    "Eve"
+]

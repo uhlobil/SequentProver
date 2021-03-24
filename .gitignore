@@ -4,4 +4,6 @@
 */data/Names.json
 */data/Settings.json
 
+/venv/*
+
 *.pyc

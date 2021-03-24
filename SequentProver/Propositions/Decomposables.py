@@ -9,6 +9,8 @@ unit = namedtuple('unit', 'ant, con')
 
 class DecompProp:
     """Base class for decomposable propositions."""
+    symbol = None
+    side = None
 
     def __init__(self):
         self.rule = Settings().get_rule(self.side + self.symbol)
