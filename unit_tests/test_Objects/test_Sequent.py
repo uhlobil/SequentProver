@@ -125,8 +125,9 @@ class TestInvertibleDecomp(unittest.TestCase):
     def test_inv_left_universal(self):
         """forall(x)(Predicate(x)) |~"""
 
-        sequent = Sequent([Universal("alpha", self.alpha)], [])
-        decomp = sequent.decompose()[0]
+        with patch("json.load", lambda *args: ["Adrian", "Eve"]):
+            sequent = Sequent([Universal("alpha", self.alpha)], [])
+            decomp = sequent.decompose()[0]
         self.assertEqual(Sequent([Atom("Predicate", ("Adrian",))], []), decomp[0])
         self.assertEqual(Sequent([Atom("Predicate", ("Eve",))], []), decomp[0])
 

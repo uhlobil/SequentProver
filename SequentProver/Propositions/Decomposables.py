@@ -296,15 +296,11 @@ class LeftUniversal(Universal):
         return True
 
     def decompose(self) -> tuple:
-        this_path = os.path.dirname(__file__)
-        namepath = os.path.join(this_path, "..", "data", "Names.json")
-        with open(namepath, "r") as file:
-            names = json.load(file)
-        units = []
-        for name in names:
-            prop = self.instantiate(self.var, name)
-            units.append(unit([prop], []),)
-        return tuple(units)
+        names = _load_object_names()
+        comp = tuple(
+            [unit([self.instantiate(self.var, name)], []) for name in names]
+        )
+        return comp
 
 
 class RightUniversal(Universal):
@@ -389,3 +385,10 @@ def _create_universal(proposition, side):
 
 def _create_existential(proposition, side):
     pass
+
+
+def _load_object_names():
+    current_file_name = os.path.dirname(__file__)
+    names_file = os.path.join(current_file_name, "..", "data", "Names.json")
+    with open(names_file, "r") as file:
+        return json.load(file)
