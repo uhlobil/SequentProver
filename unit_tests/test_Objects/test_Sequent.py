@@ -6,7 +6,7 @@ from Controllers.Settings import Settings
 from Objects.Sequents import Sequent
 from Propositions.Converters import String
 from Propositions.Decomposables import LeftUniversal
-from Propositions.Propositions import Conjunction, Conditional, Disjunction, Negation, Universal
+from Propositions.Propositions import Conjunction, Conditional, Disjunction, Negation, Universal, Existential
 from Propositions.BaseClasses import Atom
 
 
@@ -123,6 +123,38 @@ class TestInvertibleDecomp(unittest.TestCase):
         decomp = sequent.decompose()[0][0]
         self.assertEqual(Sequent([self.alpha], []), decomp)
 
+    def test_right_universal(self):
+        """|~ forall(x)(Predicate(x))"""
+
+        with patch("json.load", lambda *args: self.names):
+            sequent = Sequent([], [Existential("alpha", self.alpha)])
+            decomp = sequent.decompose()
+        self.assertEqual(Sequent([], [Atom("Predicate", ("Adrian",))]), decomp[0][0])
+        self.assertEqual(Sequent([], [Atom("Predicate", ("Eve",))]), decomp[1][0])
+
+    def test_left_existential(self):
+        """exists(x)(Predicate(x)) |~"""
+
+        with patch("json.load", lambda *args: self.names):
+            sequent = Sequent([Existential("alpha", self.alpha)], [])
+            decomp = sequent.decompose()
+        self.assertEqual(Sequent([Atom("Predicate", ("Adrian",))], []), decomp[0][0])
+        self.assertEqual(Sequent([Atom("Predicate", ("Eve",))], []), decomp[1][0])
+
+
+class TestNonInvertibleDecomp(unittest.TestCase):
+    rules = {k: v for k, v in Settings()["Sequent Rules"].items()}
+    alpha = Atom("Predicate", ("alpha",))
+    beta = Atom("Predicate", ("beta",))
+    names = ["Adrian", "Eve"]
+
+    def setUp(self) -> None:
+        Rules.change_multiple("", "NonInvertible")
+
+    def tearDown(self) -> None:
+        for k, v in self.rules.items():
+            Settings()["Sequent Rules"][k] = v
+
     def test_left_universal(self):
         """forall(x)(Predicate(x)) |~"""
 
@@ -132,14 +164,14 @@ class TestInvertibleDecomp(unittest.TestCase):
         self.assertEqual(Sequent([Atom("Predicate", ("Adrian",))], []), decomp[0][0])
         self.assertEqual(Sequent([Atom("Predicate", ("Eve",))], []), decomp[1][0])
 
-    # def test_right_existential(self):
-    #     """exists(x)(Predicate(x)) |~"""
-    #
-    #     with patch("json.load", lambda *args: self.names):
-    #         sequent = Sequent([Existential("alpha", self.alpha)], [])
-    #         decomp = sequent.decompose()
-    #     self.assertEqual(Sequent([], [Atom("Predicate", ("Adrian",))]), decomp[0][0])
-    #     self.assertEqual(Sequent([], [Atom("Predicate", ("Eve",))]), decomp[1][0])
+    def test_right_existential(self):
+        """|~ exists(x)(Predicate(x)) """
+
+        with patch("json.load", lambda *args: self.names):
+            sequent = Sequent([], [Existential("alpha", self.alpha)])
+            decomp = sequent.decompose()
+        self.assertEqual(Sequent([], [Atom("Predicate", ("Adrian",))]), decomp[0][0])
+        self.assertEqual(Sequent([], [Atom("Predicate", ("Eve",))]), decomp[1][0])
 
 
 if __name__ == '__main__':

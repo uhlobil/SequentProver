@@ -3,7 +3,7 @@ import os
 from collections import namedtuple
 
 from Controllers.Settings import Settings
-from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction, Universal
+from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction, Universal, Existential
 
 unit = namedtuple('unit', 'ant, con')
 
@@ -285,7 +285,6 @@ class LeftUniversal(Universal):
 
     def __init__(self, var, prop):
         super(Universal, self).__init__(var, prop)
-        self.rule = Settings().get_rule(self.side + self.symbol)
 
     @property
     def is_invertible(self):
@@ -302,7 +301,69 @@ class LeftUniversal(Universal):
 
 
 class RightUniversal(Universal):
-    pass
+    """Contains rules for decomposing right universals."""
+
+    side = "R"
+
+    def __init__(self, var, prop):
+        super(RightUniversal, self).__init__(var, prop)
+
+    @property
+    def is_invertible(self):
+        return False
+
+    @property
+    def is_explosive(self):
+        return True
+
+    def decompose(self) -> tuple:
+        names = _load_object_names()
+        units = [unit([], [self.instantiate(self.var, name)]) for name in names]
+
+
+class LeftExistential(Existential):
+    """Contains rules for decomposing left existentials"""
+
+    side = "L"
+
+    def __init__(self, var, prop):
+        super(LeftExistential, self).__init__(var, prop)
+
+    @property
+    def is_invertible(self):
+        return False
+
+    @property
+    def is_explosive(self):
+        return True
+
+    def decompose(self) -> tuple:
+        names = _load_object_names()
+        units = [unit([self.instantiate(self.var, name)], []) for name in names]
+        return tuple(units)
+
+
+class RightExistential(Existential):
+    """Contains rules for decomposing right existentials."""
+
+    side = "R"
+
+    def __init__(self, var, prop):
+        super(RightExistential, self).__init__(var, prop)
+
+    @property
+    def is_invertible(self):
+        return False
+
+    @property
+    def is_explosive(self):
+        return True
+
+    def decompose(self) -> tuple:
+        names = _load_object_names()
+        units = [unit([], [self.instantiate(self.var, name)]) for name in names]
+        return tuple(units)
+
 
 
 def create(attributes):
@@ -382,7 +443,13 @@ def _create_universal(proposition, side):
 
 
 def _create_existential(proposition, side):
-    pass
+    """Return a decomposable Existential."""
+    prop = proposition.prop
+    var = proposition.var
+    if side == "ant":
+        return LeftExistential(var, prop)
+    elif side == "con":
+        return RightExistential(var, prop)
 
 
 def _load_object_names():
