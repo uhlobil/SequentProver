@@ -1,6 +1,7 @@
+import json
+import os
 from collections import namedtuple
 
-from Controllers.Menus.Decomposition import MultiplicativeNameMenu
 from Controllers.Settings import Settings
 from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction, Universal
 
@@ -295,9 +296,15 @@ class LeftUniversal(Universal):
         return True
 
     def decompose(self) -> tuple:
-        name = MultiplicativeNameMenu().get()
-        prop = self.instantiate(self.var, name)
-        return unit([prop], []),
+        this_path = os.path.dirname(__file__)
+        namepath = os.path.join(this_path, "..", "data", "Names.json")
+        with open(namepath, "r") as file:
+            names = json.load(file)
+        units = []
+        for name in names:
+            prop = self.instantiate(self.var, name)
+            units.append(unit([prop], []),)
+        return tuple(units)
 
 
 class RightUniversal(Universal):

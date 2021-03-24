@@ -96,7 +96,5 @@ class TestQuantifiers(unittest.TestCase):
             self.assertEqual(c(self.result_atom, self.result_atom), test)
 
 
-
-
 if __name__ == '__main__':
     unittest.main()

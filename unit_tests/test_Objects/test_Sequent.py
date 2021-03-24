@@ -123,12 +123,12 @@ class TestInvertibleDecomp(unittest.TestCase):
         self.assertEqual(Sequent([self.alpha], []), decomp)
 
     def test_inv_left_universal(self):
-        """forall(x)(Predicate(x))"""
+        """forall(x)(Predicate(x)) |~"""
 
-        with patch("builtins.input", lambda *args: 1):
-            sequent = Sequent([Universal("alpha", self.alpha)], [])
-            decomp = sequent.decompose()[0][0]
-            self.assertEqual(Sequent([Atom("Predicate", ("Adrian",))], []), decomp)
+        sequent = Sequent([Universal("alpha", self.alpha)], [])
+        decomp = sequent.decompose()[0]
+        self.assertEqual(Sequent([Atom("Predicate", ("Adrian",))], []), decomp[0])
+        self.assertEqual(Sequent([Atom("Predicate", ("Eve",))], []), decomp[0])
 
 
 if __name__ == '__main__':

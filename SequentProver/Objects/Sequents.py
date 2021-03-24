@@ -25,10 +25,10 @@ have its .decompose() called.
 
 import itertools
 from collections import namedtuple
-from typing import Sequence, Any, Generator, Union
+from typing import Sequence, Any, Generator
 
-import Propositions.Decomposables
 import Propositions
+import Propositions.Decomposables
 
 principal = namedtuple('principal', 'side, index, proposition')
 
@@ -76,6 +76,10 @@ class Sequent:
         if self == other:
             return False
         return True
+
+    def __iter__(self) -> list:
+        yield self.ant
+        yield self.con
 
     @property
     def ant(self):
@@ -168,13 +172,13 @@ class Sequent:
                     return True
         return False
 
-    def _templates(self):
+    def _templates(self):  # Split explosive portion into two for 1-/2-parent explosives
         """If the principal is_explosive, returns a generator of 2-
         tuples, with template[0] being the left child and template[1]
         being the right child. Otherwise, the base template (which is
         just a sequent) is returned."""
-        if self.principal.proposition.is_explosive:
-            return (template for template in self._permute_template())
+        if self.principal.proposition.is_explosive and self.principal.proposition.arity == 2:
+            return (template for template in self._permute_two_parent_template())
         return self._base_template()
 
     def _base_template(self):
@@ -182,17 +186,21 @@ class Sequent:
         temp_ant = [prop for prop in self.ant]
         temp_con = [prop for prop in self.con]
         if self.principal.side == "ant":
+            # noinspection PyTypeChecker
+            # PTC thinks this is not an int
             del temp_ant[self.principal.index]
         else:
+            # noinspection PyTypeChecker
+            # PTC thinks this is not an int
             del temp_con[self.principal.index]
         return Sequent(temp_ant, temp_con)
 
-    def _permute_template(self) -> Generator[tuple, list, None]:
+    def _permute_two_parent_template(self) -> Generator[tuple, list, None]:
         """Yields possible two-parent templates for explosive sequents."""
         base: Sequent = self._base_template()
-        ant_permutations = _permute(base.ant)
+        ant_permutations = _permute_two_parent(base.ant)
         for antecedent in ant_permutations:
-            con_permutations = _permute(base.con)
+            con_permutations = _permute_two_parent(base.con)
             for consequent in con_permutations:
                 yield Sequent(antecedent[0], consequent[0]), \
                       Sequent(antecedent[1], consequent[1])
@@ -200,7 +208,7 @@ class Sequent:
     def _recombine(self, units, templates):
         """Yields results of putting the units with the templates in
         the right way."""
-        if self.principal.proposition.is_explosive:
+        if self.principal.proposition.is_explosive and self.principal.proposition.arity == 2:
             yield from _recombine_multiplicative_two_parent(templates, units)
         elif self.principal.proposition.is_invertible:
             if len(units) == 1:
@@ -211,7 +219,7 @@ class Sequent:
             yield from _recombine_additive_one_parent(templates, units)
 
 
-def _permute(propositions: tuple) -> Generator[tuple, Any, None]:
+def _permute_two_parent(propositions: tuple) -> Generator[tuple, Any, None]:
     """Generates possible combinations for propositions in sides of two
     parent multiplicative rules."""
     permutations = [
