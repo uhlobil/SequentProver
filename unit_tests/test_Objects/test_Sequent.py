@@ -55,6 +55,7 @@ class TestInvertibleDecomp(unittest.TestCase):
     rules = {k: v for k, v in Settings()["Sequent Rules"].items()}
     alpha = Atom("Predicate", ("alpha",))
     beta = Atom("Predicate", ("beta",))
+    names = ["Adrian", "Eve"]
 
     def setUp(self) -> None:
         Rules.change_multiple("", "Invertible")
@@ -122,14 +123,23 @@ class TestInvertibleDecomp(unittest.TestCase):
         decomp = sequent.decompose()[0][0]
         self.assertEqual(Sequent([self.alpha], []), decomp)
 
-    def test_inv_left_universal(self):
+    def test_left_universal(self):
         """forall(x)(Predicate(x)) |~"""
 
-        with patch("json.load", lambda *args: ["Adrian", "Eve"]):
+        with patch("json.load", lambda *args: self.names):
             sequent = Sequent([Universal("alpha", self.alpha)], [])
-            decomp = sequent.decompose()[0]
-        self.assertEqual(Sequent([Atom("Predicate", ("Adrian",))], []), decomp[0])
-        self.assertEqual(Sequent([Atom("Predicate", ("Eve",))], []), decomp[0])
+            decomp = sequent.decompose()
+        self.assertEqual(Sequent([Atom("Predicate", ("Adrian",))], []), decomp[0][0])
+        self.assertEqual(Sequent([Atom("Predicate", ("Eve",))], []), decomp[1][0])
+
+    # def test_right_existential(self):
+    #     """exists(x)(Predicate(x)) |~"""
+    #
+    #     with patch("json.load", lambda *args: self.names):
+    #         sequent = Sequent([Existential("alpha", self.alpha)], [])
+    #         decomp = sequent.decompose()
+    #     self.assertEqual(Sequent([], [Atom("Predicate", ("Adrian",))]), decomp[0][0])
+    #     self.assertEqual(Sequent([], [Atom("Predicate", ("Eve",))]), decomp[1][0])
 
 
 if __name__ == '__main__':

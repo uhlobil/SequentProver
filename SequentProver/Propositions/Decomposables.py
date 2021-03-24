@@ -297,10 +297,8 @@ class LeftUniversal(Universal):
 
     def decompose(self) -> tuple:
         names = _load_object_names()
-        comp = tuple(
-            [unit([self.instantiate(self.var, name)], []) for name in names]
-        )
-        return comp
+        units = [unit([self.instantiate(self.var, name)], []) for name in names]
+        return tuple(units)
 
 
 class RightUniversal(Universal):

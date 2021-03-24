@@ -141,13 +141,14 @@ class Quantifier(Proposition):
 
     def __eq__(self, other) -> bool:
         if self.__class__ == other.__class__:
-            if self.instantiate(self.var, "NAME") == other.instantiate(other.var, "NAME"):
+            if self.var == other.var:
                 return True
         return False
 
     def __ne__(self, other) -> bool:
         if self == other:
             return False
+        return True
 
     @property
     def var(self):
@@ -195,7 +196,7 @@ class Atom(Proposition):
         return str(self)
 
     def __eq__(self, other):
-        if self.predicate == other.predicate:
+        if self.predicate == other.predicate and self.names == other.names:
             return True
         return False
 
@@ -213,6 +214,6 @@ class Atom(Proposition):
         return self._names
 
     def instantiate(self, var, name):
-        new_names = [n if n != name else name for n in self.names]
+        new_names = [n if n != var else name for n in self.names]
         return Atom(self.predicate, new_names)
 

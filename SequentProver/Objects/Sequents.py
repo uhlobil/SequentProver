@@ -177,7 +177,8 @@ class Sequent:
         tuples, with template[0] being the left child and template[1]
         being the right child. Otherwise, the base template (which is
         just a sequent) is returned."""
-        if self.principal.proposition.is_explosive and self.principal.proposition.arity == 2:
+        proposition = self.principal.proposition
+        if proposition.is_explosive and proposition.arity == 2:
             return (template for template in self._permute_two_parent_template())
         return self._base_template()
 
@@ -208,9 +209,10 @@ class Sequent:
     def _recombine(self, units, templates):
         """Yields results of putting the units with the templates in
         the right way."""
-        if self.principal.proposition.is_explosive and self.principal.proposition.arity == 2:
+        proposition = self.principal.proposition
+        if proposition.is_explosive and proposition.arity == 2:
             yield from _recombine_multiplicative_two_parent(templates, units)
-        elif self.principal.proposition.is_invertible:
+        elif proposition.is_invertible:
             if len(units) == 1:
                 yield from _recombine_multiplicative_one_parent(templates, units)
             else:
