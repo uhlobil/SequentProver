@@ -95,6 +95,20 @@ class TestQuantifiers(unittest.TestCase):
             test = universal.instantiate(universal.var, "testname")
             self.assertEqual(c(self.result_atom, self.result_atom), test)
 
+    def test_existential_predicate_from_string(self):
+        e = "(exists(x)(LikesFudge(x)))"
+        convert = String(e).to_proposition()
+        self.assertEqual(Existential("x", Atom("LikesFudge", ("x",))), convert)
+
+    def test_complex_existential_from_string(self):
+        e = "(exists(x)(Cute(x) and Cat(x)))"
+        convert = String(e).to_proposition()
+        self.assertEqual(Existential("x", Conjunction(Atom("Cute", ("x",)), Atom("Cat", ("x",)))), convert)
+
+    def test_universal_predicate_from_string(self):
+        u = "(forall(x)(LikesFudge(x)))"
+        convert = String(u).to_proposition()
+        self.assertEqual(Universal("x", Atom("LikesFudge", ("x",))), convert)
 
 if __name__ == '__main__':
     unittest.main()

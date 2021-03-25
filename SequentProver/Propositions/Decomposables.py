@@ -365,7 +365,6 @@ class RightExistential(Existential):
         return tuple(units)
 
 
-
 def create(attributes):
     """Returns the decomposable proposition based on the input attributes."""
     proposition = attributes.proposition
