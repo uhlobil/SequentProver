@@ -1,13 +1,11 @@
 import os
 import json
-from Propositions import Atom
-from Propositions import Negation
-from Propositions import Conditional
-from Propositions import Conjunction
-from Propositions import Disjunction
 from Objects.Sequents import Sequent
 
 # Propositions
+from Propositions.BaseClasses import Atom
+from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction
+
 atom = Atom('Proposition')
 negation = Negation(atom)
 conditional = Conditional(atom, atom)

@@ -1,6 +1,6 @@
 import unittest
 
-from Controllers.Rules.Rules import SetRules
+from Controllers.Rules import change_multiple
 from Objects.Sequents import Sequent
 from Objects.Trees import Tree
 from View.DisplayTrees import Key
@@ -10,7 +10,7 @@ from unit_tests.mocks import Objects as mock
 class TestInvertibleDecomp(unittest.TestCase):
 
     def setUp(self) -> None:
-        SetRules().change_all('Invertible')
+        change_multiple(rule="", mode="Invertible")
 
     def test_one_parent_sequents_invertible_decompose(self):
         sequent = mock.reflexive_negation_sequent
@@ -40,7 +40,7 @@ class TestInvertibleDecomp(unittest.TestCase):
 
 class TestNonInvertibleDecomp(unittest.TestCase):
     def setUp(self) -> None:
-        SetRules().change_all('NonInvertible')
+        change_multiple(rule="", mode="NonInvertible")
 
     def test_one_parent_sequents_non_invertible_decompose(self):
         sequent = mock.right_conditional_sequent

@@ -5,6 +5,16 @@ from Propositions.Propositions import Negation, Conditional, Conjunction, Disjun
 from Propositions.BaseClasses import Atom
 
 
+class TestConvert(unittest.TestCase):
+    def test_converting_sequent_to_proposition_raises_value_error(self):
+        with self.assertRaises(ValueError):
+            String("a |~ b").to_proposition()
+
+    def test_converting_proposition_to_sequent_raises_value_error(self):
+        with self.assertRaises(ValueError):
+            String("A implies B").to_sequent()
+
+
 class TestAtoms(unittest.TestCase):
     prop = Atom("Predicate", ("alpha", "beta", "gamma"))
 
@@ -100,15 +110,16 @@ class TestQuantifiers(unittest.TestCase):
         convert = String(e).to_proposition()
         self.assertEqual(Existential("x", Atom("LikesFudge", ("x",))), convert)
 
+    def test_universal_predicate_from_string(self):
+        u = "(forall(y)(EatsDoughnuts(y)))"
+        convert = String(u).to_proposition()
+        self.assertEqual(Universal("y", Atom("EatsDoughnuts", ("y",))), convert)
+
     def test_complex_existential_from_string(self):
         e = "(exists(x)(Cute(x) and Cat(x)))"
         convert = String(e).to_proposition()
         self.assertEqual(Existential("x", Conjunction(Atom("Cute", ("x",)), Atom("Cat", ("x",)))), convert)
 
-    def test_universal_predicate_from_string(self):
-        u = "(forall(x)(LikesFudge(x)))"
-        convert = String(u).to_proposition()
-        self.assertEqual(Universal("x", Atom("LikesFudge", ("x",))), convert)
 
 if __name__ == '__main__':
     unittest.main()

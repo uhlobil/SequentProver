@@ -128,7 +128,7 @@ class Quantifier(Proposition):
         self._prop = prop
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}(({self.var})({self.prop}))"
+        return f"{self.__class__.__name__}({self.var}, {self.prop})"
 
     def __str__(self) -> str:
         return f"{self.symbol}({self.var})({self.prop})"
@@ -141,7 +141,7 @@ class Quantifier(Proposition):
 
     def __eq__(self, other) -> bool:
         if self.__class__ == other.__class__:
-            if self.var == other.var:
+            if self.var == other.var and self.prop == other.prop:
                 return True
         return False
 

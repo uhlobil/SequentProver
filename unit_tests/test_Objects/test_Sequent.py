@@ -47,9 +47,6 @@ class TestSequent(unittest.TestCase):
         self.assertEqual(0, principal.index)
         self.assertEqual(LeftUniversal("x", Atom("Proposition", ("x",))), principal.proposition)
 
-    def test_sequent_right_universal_principal(self):
-        self.assertTrue(False)
-
 
 class TestInvertibleDecomp(unittest.TestCase):
     rules = {k: v for k, v in Settings()["Sequent Rules"].items()}
