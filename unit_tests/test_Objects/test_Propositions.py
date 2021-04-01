@@ -125,6 +125,11 @@ class TestQuantifiers(unittest.TestCase):
         b = Existential("y", Atom("Simple", ("y",)))
         self.assertEqual(a, b)
 
+    def test_complex_quantifier_eq_same_object_predicate_different_names(self):
+        a = Universal("x", Conjunction(Atom("Tough", ("x",)), Atom("Hard", ("x",))))
+        b = Universal("y", Conjunction(Atom("Tough", ("y",)), Atom("Hard", ("y",))))
+        self.assertEqual(a, b)
+
 
 if __name__ == '__main__':
     unittest.main()
