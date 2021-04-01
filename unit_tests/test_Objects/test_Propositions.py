@@ -120,6 +120,11 @@ class TestQuantifiers(unittest.TestCase):
         convert = String(e).to_proposition()
         self.assertEqual(Existential("x", Conjunction(Atom("Cute", ("x",)), Atom("Cat", ("x",)))), convert)
 
+    def test_quantifier_eq_with_same_predicate_different_names(self):
+        a = Existential("x", Atom("Simple", ("x",)))
+        b = Existential("y", Atom("Simple", ("y",)))
+        self.assertEqual(a, b)
+
 
 if __name__ == '__main__':
     unittest.main()

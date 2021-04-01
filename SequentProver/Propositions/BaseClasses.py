@@ -1,3 +1,4 @@
+import itertools
 from typing import Sequence
 
 
@@ -141,7 +142,7 @@ class Quantifier(Proposition):
 
     def __eq__(self, other) -> bool:
         if self.__class__ == other.__class__:
-            if self.var == other.var and self.prop == other.prop:
+            if self.instantiate(self.var, "NAME") == other.instantiate(other.var, "NAME"):
                 return True
         return False
 
@@ -172,6 +173,12 @@ class Quantifier(Proposition):
 
     def instantiate(self, var, name):
         return self.prop.instantiate(var, name)
+
+    def _name_generator(self):
+        """Produces 2-character combinations of lowercase letters from
+        aaa to zzz in order."""
+        for i in itertools.product(map(chr, range(97, 123)), repeat=2):
+            yield ''.join(i)
 
 
 class Atom(Proposition):
