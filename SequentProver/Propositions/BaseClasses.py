@@ -129,7 +129,7 @@ class Quantifier(Proposition):
         self._prop = prop
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}({self.var}, {self.prop})"
+        return f"{self.__str__()}({self.var}, {self.prop})"
 
     def __str__(self) -> str:
         return f"{self.symbol}({self.var})({self.prop})"

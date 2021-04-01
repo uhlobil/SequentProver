@@ -130,6 +130,35 @@ class TestQuantifiers(unittest.TestCase):
         b = Universal("y", Conjunction(Atom("Tough", ("y",)), Atom("Hard", ("y",))))
         self.assertEqual(a, b)
 
+    def test_complex_quantifier_eq_same_object_multi_predicate(self):
+        a = Universal("x", Conjunction(Atom("Tough", ("x", "x")), Atom("Hard", ("x", "x"))))
+        b = Universal("y", Conjunction(Atom("Tough", ("y", "y")), Atom("Hard", ("y", "y"))))
+        self.assertEqual(a, b)
+
+    def test_nested_atomic_quantifier_init(self):
+        nest = Universal("x", Existential("y", Atom("Nested", ("x", "y"))))
+        self.assertEqual(Existential("y", Atom("Nested", ("x", "y"))), nest.prop)
+        self.assertEqual("x", nest.var)
+        self.assertEqual([], nest.names)
+        self.assertEqual(Atom("Nested", ("x", "y")), nest.prop.prop)
+
+    def test_nested_complex_quantifier_init(self):
+        nest = Universal("x", Existential("y", Conjunction(Atom("Nested", ("x",)), Atom("Nested", ("y",)))))
+        self.assertEqual(Existential("y", Conjunction(Atom("Nested", ("x",)), Atom("Nested", ("y",)))), nest.prop)
+        self.assertEqual("x", nest.var)
+        self.assertEqual([], nest.names)
+        self.assertEqual(Conjunction(Atom("Nested", ("x",)), Atom("Nested", ("y",))), nest.prop.prop)
+        self.assertEqual("y", nest.prop.var)
+
+    def test_nested_two_name_atomic_quantifier(self):
+        nest = Universal("w", Existential("x", Atom("Nested", ("x", "w"))))
+        self.assertEqual(Existential("x", Atom("Nested", ("x", "w"))), nest.prop)
+        self.assertEqual(Atom("Nested", ("x", "w")), nest.prop.prop)
+
+    def test_nested_two_name_complex_quantifier(self):
+        nest = Universal("w", Existential("x", Disjunction(Atom("Nested", ("x", "w")), Atom("Nested", ("w", "x")))))
+        self.assertEqual(Existential("x", Disjunction(Atom("Nested", ("x", "w")), Atom("Nested", ("w", "x")))), nest.prop)
+        self.assertEqual(Disjunction(Atom("Nested", ("x", "w")), Atom("Nested", ("w", "x"))), nest.prop.prop)
 
 if __name__ == '__main__':
     unittest.main()
