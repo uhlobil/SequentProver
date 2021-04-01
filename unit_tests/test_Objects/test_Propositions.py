@@ -165,6 +165,14 @@ class TestQuantifiers(unittest.TestCase):
         inst = uni.instantiate("x", "alpha")
         self.assertEqual(Existential("y", Atom("Nested", ("alpha", "y"))), inst)
 
+    def test_quantifier_namespace_saturation(self):
+        a = Universal("x", Atom("Saturated", ("x", "NAME", "NAME")))
+        b = Universal("x", Atom("Saturated", ("x", "x", "NAME")))
+        self.assertNotEqual(a, b)
+        c = Existential("a", Universal("b", Atom("Saturated", ("a", "b", "b"))))
+        d = Existential("a", Universal("b", Atom("Saturated", ("a", "a", "b"))))
+        self.assertNotEqual(c, d)
+
 
 if __name__ == '__main__':
     unittest.main()

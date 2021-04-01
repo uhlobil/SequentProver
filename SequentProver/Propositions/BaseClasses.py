@@ -142,7 +142,11 @@ class Quantifier(Proposition):
 
     def __eq__(self, other) -> bool:
         if self.__class__ == other.__class__:
-            if self.instantiate(self.var, "NAME") == other.instantiate(other.var, "NAME"):
+            generator = self._name_generator()
+            name = next(generator)
+            while name in self.prop.names:
+                name = next(generator)
+            if self.instantiate(self.var, name) == other.instantiate(other.var, name):
                 return True
         return False
 
@@ -173,9 +177,9 @@ class Quantifier(Proposition):
 
     def instantiate(self, var, name):
         if isinstance(self.prop, Quantifier):
-            inner_prop = self.prop.prop
+            inner_prop = self.prop
             instantiated = inner_prop.instantiate(var, name)
-            return self.prop.__class__(instantiated.prop, instantiated.names)
+            return inner_prop.__class__(inner_prop.var, instantiated)
         else:
             return self.prop.instantiate(var, name)
 
@@ -192,34 +196,37 @@ class Atom(Proposition):
     """
     arity: int = 0
     complexity: int = 0
-    __slots__ = ("_predicate", "_names")
+    __slots__ = ("_prop", "_names")
 
-    def __init__(self, predicate: str, *names: Sequence):
-        self._predicate = predicate
+    def __init__(self, prop: str, *names: Sequence):
+        self._prop = prop
         self._names = tuple(*names)
 
     def __str__(self):
         if self.names:
-            return f"{self.predicate}({'; '.join(self.names)})"
+            return f"{self.prop}({'; '.join(self.names)})"
         else:
-            return f"{self.predicate}"
+            return f"{self.prop}"
 
     def __repr__(self):
         return str(self)
 
     def __eq__(self, other):
-        if self.predicate == other.predicate and self.names == other.names:
+        if self.prop == other.prop and self.names == other.names:
             return True
         return False
 
     def __ne__(self, other):
-        if self.predicate == other.prop:
+        if self.prop == other.prop:
             return False
         return True
 
+    # Strictly speaking, this should be called "predicate" or something
+    # but naming it prop allows me to use fewer "if" statements, which
+    # is better for everyone in the long run.
     @property
-    def predicate(self):
-        return self._predicate
+    def prop(self):
+        return self._prop
 
     @property
     def names(self):
@@ -227,5 +234,5 @@ class Atom(Proposition):
 
     def instantiate(self, var, name):
         new_names = [n if n != var else name for n in self.names]
-        return Atom(self.predicate, new_names)
+        return Atom(self.prop, new_names)
 
