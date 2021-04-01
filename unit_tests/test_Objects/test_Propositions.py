@@ -160,5 +160,11 @@ class TestQuantifiers(unittest.TestCase):
         self.assertEqual(Existential("x", Disjunction(Atom("Nested", ("x", "w")), Atom("Nested", ("w", "x")))), nest.prop)
         self.assertEqual(Disjunction(Atom("Nested", ("x", "w")), Atom("Nested", ("w", "x"))), nest.prop.prop)
 
+    def test_nested_instantiated(self):
+        uni = Universal("x", Existential("y", Atom("Nested", ("x", "y"))))
+        inst = uni.instantiate("x", "alpha")
+        self.assertEqual(Existential("y", Atom("Nested", ("alpha", "y"))), inst)
+
+
 if __name__ == '__main__':
     unittest.main()

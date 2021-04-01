@@ -172,7 +172,12 @@ class Quantifier(Proposition):
         return 1 + self.prop.complexity
 
     def instantiate(self, var, name):
-        return self.prop.instantiate(var, name)
+        if isinstance(self.prop, Quantifier):
+            inner_prop = self.prop.prop
+            instantiated = inner_prop.instantiate(var, name)
+            return self.prop.__class__(instantiated.prop, instantiated.names)
+        else:
+            return self.prop.instantiate(var, name)
 
     def _name_generator(self):
         """Produces 2-character combinations of lowercase letters from
