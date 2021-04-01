@@ -1,7 +1,8 @@
 import unittest
 
 from Propositions.Converters import String
-from Propositions.Propositions import Negation, Conditional, Conjunction, Disjunction, Universal, Existential
+from Propositions.Propositions import Negation, Conditional, Conjunction, \
+    Disjunction, Universal, Existential
 from Propositions.BaseClasses import Atom
 
 
@@ -74,7 +75,7 @@ class TestBinary(unittest.TestCase):
 class TestQuantifiers(unittest.TestCase):
     types = Universal, Existential
     test_atom = Atom("Predicate", ("alpha", "x", "beta"))
-    result_atom = Atom("Predicate", ("alpha", "testname", "beta"))
+    result_atom = Atom("Predicate", ("alpha", "nothing", "beta"))
     unary = Negation,
     binary = Conditional, Conjunction, Disjunction
 
@@ -90,19 +91,19 @@ class TestQuantifiers(unittest.TestCase):
 
     def test_instantiate_atom(self):
         universal = Universal("x", self.test_atom)
-        test = universal.instantiate(universal.var, "testname")
+        test = universal.instantiate(universal.var, "nothing")
         self.assertEqual(self.result_atom, test)
 
     def test_instantiate_unary(self):
         for c in self.unary:
             universal = Universal("x", c(self.test_atom))
-            test = universal.instantiate(universal.var, "testname")
+            test = universal.instantiate(universal.var, "nothing")
             self.assertEqual(c(self.result_atom), test)
 
     def test_instantiate_binary(self):
         for c in self.binary:
             universal = Universal("x", c(self.test_atom, self.test_atom))
-            test = universal.instantiate(universal.var, "testname")
+            test = universal.instantiate(universal.var, "nothing")
             self.assertEqual(c(self.result_atom, self.result_atom), test)
 
     def test_existential_predicate_from_string(self):
@@ -118,7 +119,12 @@ class TestQuantifiers(unittest.TestCase):
     def test_complex_existential_from_string(self):
         e = "(exists(x)(Cute(x) and Cat(x)))"
         convert = String(e).to_proposition()
-        self.assertEqual(Existential("x", Conjunction(Atom("Cute", ("x",)), Atom("Cat", ("x",)))), convert)
+        self.assertEqual(
+            Existential("x",
+                        Conjunction(
+                            Atom("Cute", ("x",)),
+                            Atom("Cat", ("x",)))),
+            convert)
 
     def test_quantifier_eq_with_same_predicate_different_names(self):
         a = Existential("x", Atom("Simple", ("x",)))
@@ -143,11 +149,27 @@ class TestQuantifiers(unittest.TestCase):
         self.assertEqual(Atom("Nested", ("x", "y")), nest.prop.prop)
 
     def test_nested_complex_quantifier_init(self):
-        nest = Universal("x", Existential("y", Conjunction(Atom("Nested", ("x",)), Atom("Nested", ("y",)))))
-        self.assertEqual(Existential("y", Conjunction(Atom("Nested", ("x",)), Atom("Nested", ("y",)))), nest.prop)
+        nest = Universal("x",
+                         Existential("y",
+                                     Conjunction(
+                                         Atom("Nested", ("x",)),
+                                         Atom("Nested", ("y",))))
+                         )
+        self.assertEqual(
+            Existential("y",
+                        Conjunction(
+                            Atom("Nested", ("x",)),
+                            Atom("Nested", ("y",)))),
+            nest.prop
+        )
         self.assertEqual("x", nest.var)
         self.assertEqual([], nest.names)
-        self.assertEqual(Conjunction(Atom("Nested", ("x",)), Atom("Nested", ("y",))), nest.prop.prop)
+        self.assertEqual(
+            Conjunction(
+                Atom("Nested", ("x",)),
+                Atom("Nested", ("y",))),
+            nest.prop.prop
+        )
         self.assertEqual("y", nest.prop.var)
 
     def test_nested_two_name_atomic_quantifier(self):
@@ -156,9 +178,24 @@ class TestQuantifiers(unittest.TestCase):
         self.assertEqual(Atom("Nested", ("x", "w")), nest.prop.prop)
 
     def test_nested_two_name_complex_quantifier(self):
-        nest = Universal("w", Existential("x", Disjunction(Atom("Nested", ("x", "w")), Atom("Nested", ("w", "x")))))
-        self.assertEqual(Existential("x", Disjunction(Atom("Nested", ("x", "w")), Atom("Nested", ("w", "x")))), nest.prop)
-        self.assertEqual(Disjunction(Atom("Nested", ("x", "w")), Atom("Nested", ("w", "x"))), nest.prop.prop)
+        nest = Universal("w",
+                         Existential("x",
+                                     Disjunction(
+                                         Atom("Nested", ("x", "w")),
+                                         Atom("Nested", ("w", "x"))))
+                         )
+        self.assertEqual(
+            Existential("x",
+                        Disjunction(
+                            Atom("Nested", ("x", "w")),
+                            Atom("Nested", ("w", "x")))),
+            nest.prop
+        )
+        self.assertEqual(
+            Disjunction(
+                Atom("Nested", ("x", "w")),
+                Atom("Nested", ("w", "x"))),
+            nest.prop.prop)
 
     def test_nested_instantiated(self):
         uni = Universal("x", Existential("y", Atom("Nested", ("x", "y"))))
