@@ -4,7 +4,7 @@ from io import StringIO
 from contextlib import contextmanager
 from unittest.mock import patch
 
-from Controllers.Menus.Base import Menu
+from Controllers.Menus.Base import Menu, Option
 
 
 # Stolen from https://stackoverflow.com/a/17981937
@@ -27,31 +27,17 @@ class TestMenus(unittest.TestCase):
     def test_menu_starts_with_quit_item(self):
         self.assertEqual("Exit", self.menu.options[0].label)
 
-    def test_menu_quits(self):
-        def lady():
-            for letter in "Lady":
-                print(letter)
-            print("Lady")
-
-        def cats():
-            kittens = ("Luros", "Lazarus")
-            for cat in kittens:
-                print(cat)
-
+    def test_menu_options(self):
         options = [
-            ("wow", lambda: print("much wow")),
-            ("cats", cats),
-            ("func", lady)
+            Option("wow", lambda: print("much wow")),
         ]
         self.menu.extend(options)
-        selections = [1, 0, 2, 0, 3, 0]
-        expected = ["much wow", ["Luros", "Lazarus"], ["L", "a", "d", "y"]]
+        selections = ["1", "0"]
+        expected = "much wow"
         with patch("builtins.input", selections.pop(0)):
-            for i, _ in enumerate(options):
-                with capture_output() as (out, err):
-                    self.menu.open()
-                    self.assertEqual(expected[i], out)
-
+            with capture_output() as (out, err):
+                self.menu.open()
+                self.assertEqual(expected, out)
 
 
 if __name__ == '__main__':
