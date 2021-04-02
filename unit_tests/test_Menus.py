@@ -1,3 +1,4 @@
+import os
 import sys
 import unittest
 from io import StringIO
@@ -5,6 +6,9 @@ from contextlib import contextmanager
 from unittest.mock import patch
 
 from Controllers.Menus.Base import Menu, Option
+
+
+current_dir = os.path.dirname(__file__)
 
 
 # Stolen from https://stackoverflow.com/a/17981937
@@ -38,6 +42,10 @@ class TestMenus(unittest.TestCase):
             with capture_output() as (out, err):
                 self.menu.open()
                 self.assertEqual(expected, out)
+
+    def test_menu_loads_file(self):
+        mock_file = os.path.join(current_dir, "mocks", "Menus", "TestMenu.json")
+        self.menu.load(mock_file)
 
 
 if __name__ == '__main__':

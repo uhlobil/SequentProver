@@ -1,1 +1,8 @@
-{}
+{
+  "options": {
+    "Lady": "lambda: print('Lady')"
+  },
+  "packages": {
+    "Objects.Sequents": "Sequent"
+  }
+}
