@@ -1,119 +1,81 @@
+import json
+import importlib
 from collections import namedtuple
+from typing import Sequence
+from os import system
+
+
+Option = namedtuple("Option", "label, command")
 
 
 class Menu:
-    """
-    Base class for menu creation.
+    options = [
+        Option("Exit", exit)
+    ]
+    _separator = "=" * 78
 
-    To subclass: create an options instance property (or class property
-    if you don't expect it to change at runtime) and create a
-    run(self, selection) containing a switch statement based on which
-    selection is chosen (numbers start at 1 because 0 is always 'exit').
-
-    self.open() makes a menu with real options that do things.
-    self.get() returns input from self.options.
-    You may desire for both of these to work, but they don't so you'll
-    have to overwrite them in your base class because that's not
-    currently supported.
-    """
-
-    options = []
-
-    def __init__(self, message='Please Select:'):
-        self.exit = False
-        self.message = message
+    def __init__(self, file=None, options=None):
+        self.alive = True
+        self.prompt = "Please Select: \n"
+        if file is not None:
+            self.load(file)
+        elif options is not None:
+            self.extend(options)
 
     def open(self):
-        """Executes the selected option. Use only if self.options
-        contains functions or methods."""
-        while not self.exit:
-            selection = MenuHandler(self.options, message=self.message).handle()
-            if selection == 0:
-                print('Exit')
-                self.exit = True
-            else:
-                print(self.options[selection - 1])
-                self._select(selection)
+        self._clear()
+        while self.alive is True:
+            self._show_options()
+            choice = self._get_input()
+            self._handle(choice)
 
-    def get(self):
-        """Returns the selected option. Use only if self.options
-        contains data (or be prepared for whatever comes out)."""
-        selection = MenuHandler(self.options, message=self.message).handle()
-        if selection == 0:
-            print('Exit')
-        else:
-            print(f'Selected: {self.options[selection - 1]}')
-            return self._select(selection)
+    def exit(self):
+        self.alive = False
 
-    def _select(self, selection):
-        """Routes the correct option into self.run()."""
-        for i, _ in enumerate(self.options):
-            if selection == i + 1:
-                choice = self.run(selection)
-                return choice
+    def load(self, file: str):
+        with open(file, "r") as target:
+            contents = json.load(target)
+        for package, items in contents["packages"].items():
+            for item in items:
+                importlib.import_module(item, package)
+        options = []
+        for label, function in contents["options"].items():
+            options.append(Option(label, function))
+        self.extend(options)
 
-    def run(self, selection):
-        """Switch statement for i, _ in enumerate(options)."""
-        raise NotImplementedError
-        # if selection == 1:
-        #   do option 1
-        # elif selection == 2:
-        #   do option 2
-        # ...
+    def extend(self, options: Sequence):
+        for option in options:
+            if len(option) != 2:
+                raise IndexError(f"Option {option} must contain 2 items")
+            if not callable(option[1]):
+                raise ValueError(f"{option[1]} must be callable.")
+            self.options.append(Option(str(option[0]), option[1]))
 
+    def _clear(self):
+        system("clear")
+        print(self._separator)
 
-def confirm_menu(explanation):
-    """Throws up a confirm dialogue, in case you don't want to run
-    an option accidentally."""
-    selection = MenuHandler(
-        options=['Continue'],
-        message=explanation
-    ).handle()
-    return bool(selection)
+    def _show_options(self):
+        for i, option in enumerate(self.options):
+            number = f"{str(i).rjust(2, ' ')}. "
+            print(number, option.label)
 
-
-menu_option = namedtuple('Option', 'label')
-
-
-class MenuHandler:
-    """Displays and handles input for menus"""
-    separator = '=' * 78
-    message = False
-
-    def __init__(self, options=None, message=None):
-        if options is None:
-            options = []
-        self.options = {0: menu_option("Exit")}
-        for index, value in enumerate(options):
-            self.options.update({1 + index: menu_option(value)})
-
-        if message:
-            self.message = message
-
-    def handle(self, input_message='Please Select: '):
-        """Returns input if it is a valid option, otherwise asks for
-        input again."""
-        while True:
-            selection = self._get_input(input_message)
-            if selection in self.options.keys():
-                return selection
-            else:
-                print('Unknown Input!')
-
-    def _get_input(self, input_message):
-        """Collects input and returns it as an integer. Non-integer
-        responses are not allowed."""
+    def _get_input(self):
+        result = None
         try:
-            self._print()
-            choice = input(input_message)
-            return int(choice)
-        except ValueError:
-            return
+            choice = int(input(self.prompt))
+            result = self.options[choice].command
+        except (IndexError, ValueError):
+            self._clear()
+            print("Unknown Option Selected.")
+        return result
 
-    def _print(self):
-        """Prints the instance's options."""
-        print(self.separator)
-        if self.message:
-            print(self.message)
-        for option in sorted(self.options.keys()):
-            print(f'{option}. {self.options[option].label}')
+    def _handle(self, choice):
+        if choice is not None:
+            if isinstance(choice, str):
+                return str
+            elif callable(choice):
+                choice()
+        else:
+            self._clear()
+        return None

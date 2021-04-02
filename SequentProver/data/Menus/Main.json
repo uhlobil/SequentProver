@@ -1,0 +1,16 @@
+{
+  "options": {
+    "Decompose Sequents": "decompose_sequents",
+    "View Runs": "ViewRuns().open",
+    "Change Rules": "ChangeRules().open",
+    "Check/Change Names": "ViewNames().open",
+    "Check/Change Sequent File": "Settings().update_input_file"
+  },
+  "packages": {
+    "Controllers.ImportExport": ["decompose_sequents"],
+    "Controllers.Menus.Base": ["Menu", "confirm_menu"],
+    "Controllers.Menus.Display": ["ViewRuns"],
+    "Controllers.Menus.Settings": ["ChangeRules", "ViewNames"],
+    "Controllers.Settings": ["Settings"]
+  }
+}
