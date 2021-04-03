@@ -1,0 +1,26 @@
+{
+  "Conditionals": [
+    "",
+    "->"
+  ],
+  "Conjunction": [
+    "",
+    "&"
+  ],
+  "Disjunction": [
+    "",
+    "v"
+  ],
+  "Left Rules": [
+    "L",
+    "change_left"
+  ],
+  "Right Rules": [
+    "",
+    "R"
+  ],
+  "All Rules": [
+    "",
+    ""
+  ]
+}

@@ -21,7 +21,9 @@ def change_rules():
 
 
 def change_single():
-    pass
+    menu_file = os.path.join(_data_dir, "Menus", "ChangeSingle.json")
+    rules_menu = Menu(file=menu_file)
+    rules_menu.open()
 
 
 def change_multiple():

@@ -25,11 +25,14 @@ class Menu:
             ]
 
     def open(self):
+        """Return None if chosen option is callable, else return its value."""
         self._clear()
+        return_value = None
         while self.alive is True:
             self._show_options()
             choice = self._get_input()
-            self._handle(choice)
+            return_value = self._handle(choice)
+        return return_value
 
     def exit(self):
         self.alive = False
@@ -63,8 +66,6 @@ class Menu:
         for option in options:
             if len(option) != 2:
                 raise IndexError(f"Option {option} must contain 2 items")
-            if not callable(option[1]):
-                raise ValueError(f"{option[1]} must be callable.")
             self.options.append(Option(str(option[0]), option[1]))
 
     def _clear(self):
