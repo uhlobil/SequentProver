@@ -1,0 +1,18 @@
+{
+  "Exit": [
+    "",
+    "self.exit"
+  ],
+  "Change Single Rule": [
+    "",
+    "change_single"
+  ],
+  "Change Multiple Rules": [
+    "",
+    "change_multiple"
+  ],
+  "Change Structural Rule": [
+    "",
+    "change_structure"
+  ]
+}

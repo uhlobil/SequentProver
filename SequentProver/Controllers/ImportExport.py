@@ -89,3 +89,13 @@ class Decompose:
             forest.append(tree)
         Export(forest).to_runs()
         Export(forest).to_atoms()
+
+
+def decompose_sequents():
+    input_file = Settings()["Input File"]
+    try:
+        Decompose(input_file).sequents()
+    except FileNotFoundError:
+        print("Input file could not be found at: \n"
+              f"{input_file} \n"
+              f"Please verify file name and location.")

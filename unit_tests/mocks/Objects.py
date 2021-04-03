@@ -125,3 +125,8 @@ def load_tree(filename) -> dict:
     """Returns the tree in filename as a dict."""
     with open(os.path.join('env', 'unit_tests', 'mocks', 'Trees', f'{filename}.json'), 'r') as file:
         return json.load(file)
+
+
+# Function
+def test_function():
+    return Atom("test")

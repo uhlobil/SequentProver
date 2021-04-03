@@ -1,7 +1,10 @@
 {
-  "options": {
-    "test_basic_lambda_from_file": "lambda: print('Lady')"
-  },
-  "packages": {
-  }
+  "test_basic_lambda_from_file": [
+    "",
+    "lambda: print('Lady')"
+  ],
+  "test_import_package_using_file": [
+    "unit_tests.mocks.Objects",
+    "test_function"
+  ]
 }

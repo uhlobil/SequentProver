@@ -15,6 +15,14 @@ def change_single(rule):
         Settings()["Sequent Rules"][rule] = "Add"
 
 
+def left_conditional(): change_single("L->")
+def right_conditional(): change_single("R->")
+def left_conjunction(): change_single("L&")
+def right_conjunction(): change_single("R&")
+def left_disjunction(): change_single("Lv")
+def right_disjunction(): change_single("Rv")
+
+
 def change_structure(rule):
     if Settings()[rule] == "On":
         Settings()[rule] = "Off"

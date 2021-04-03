@@ -1,0 +1,30 @@
+{
+  "Exit": [
+    "",
+    "self.exit"
+  ],
+  "Left Conditional": [
+    "Controllers.Rules",
+    "left_conditional"
+  ],
+  "Right Conditional": [
+    "Controllers.Rules",
+    "right_conditional"
+  ],
+    "Left Conjunction": [
+    "Controllers.Rules",
+    "left_conjunction"
+  ],
+  "Right Conjunction": [
+    "Controllers.Rules",
+    "right_conjunction"
+  ],
+    "Left Disjunction": [
+    "Controllers.Rules",
+    "left_disjunction"
+  ],
+  "Right Disjunction": [
+    "Controllers.Rules",
+    "right_disjunction"
+  ]
+}

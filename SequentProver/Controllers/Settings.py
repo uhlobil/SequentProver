@@ -74,3 +74,7 @@ def Settings():
     if settings is None:
         settings = _Settings()
     return settings
+
+
+def update_input_file():
+    Settings().update_input_file()

@@ -10,17 +10,19 @@ Option = namedtuple("Option", "label, command")
 
 class Menu:
     _separator = "=" * 78
+    options = []
 
     def __init__(self, file=None, options=None):
-        self.options = [
-            Option("Exit", self.exit)
-        ]
         self.alive = True
         self.prompt = "Please Select: \n"
         if file is not None:
             self.load(file)
         elif options is not None:
             self.extend(options)
+        else:
+            self.options = [
+                Option("Exit", self.exit)
+            ]
 
     def open(self):
         self._clear()
@@ -33,14 +35,28 @@ class Menu:
         self.alive = False
 
     def load(self, file: str):
+        """Fill the menu with the contents of (json) file
+
+        Format the file thus:
+        {
+            "option label 1": [
+                "function source package",
+                "function name"
+            ],
+            "option label 2": [
+                ...
+            ],
+            ...
+        }
+        """
+
         with open(file, "r") as target:
-            contents = json.load(target)
-        for package, items in contents["packages"].items():
-            for item in items:
-                importlib.import_module(package, item)
+            file = json.load(target)
         options = []
-        for label, function in contents["options"].items():
-            options.append(Option(label, eval(function)))
+        for label, contents in file.items():
+            module = importlib.import_module(contents[0]) if contents[0] else None
+            function = getattr(module, contents[1]) if module else eval(contents[1])
+            options.append(Option(label, function))
         self.extend(options)
 
     def extend(self, options: Sequence):

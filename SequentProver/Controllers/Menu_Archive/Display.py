@@ -1,7 +1,7 @@
 import os
 
 from Controllers.ImportExport import Import
-from Controllers.Menus.Base import Menu, confirm_menu
+from Controllers.Menus.Base import Menu
 from View.DisplayTrees import display
 
 

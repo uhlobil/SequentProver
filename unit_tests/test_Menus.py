@@ -1,9 +1,7 @@
 import io
-import contextlib
 import os
 import unittest
 from unittest.mock import patch
-
 from Controllers.Menus.Base import Menu, Option
 
 
@@ -48,6 +46,8 @@ class TestMenus(unittest.TestCase):
 
     def test_import_package_using_file(self):
         self.menu.load(self.mock_file)
+        a = self.menu.options[2].command()
+        self.assertEqual("test", a.prop)
 
 
 if __name__ == '__main__':
