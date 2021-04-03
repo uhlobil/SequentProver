@@ -8,16 +8,16 @@
     "decompose_sequents"
   ],
   "View Runs": [
-    "Controllers.Menus.Constructors",
+    "",
     "view_runs"
   ],
   "Change Rules": [
-    "Controllers.Menus.Constructors",
+    "",
     "change_rules"
   ],
   "Check/Change Names": [
-    "Controllers.Menus.Constructors",
-    "view_names"
+    "",
+    "names_menu"
   ],
 
   "Check/Change Sequent File": [

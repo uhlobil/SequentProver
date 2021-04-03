@@ -4,27 +4,27 @@
     "self.exit"
   ],
   "Left Conditional": [
-    "Controllers.Rules",
-    "left_conditional"
+    "",
+    "'L->'"
   ],
   "Right Conditional": [
-    "Controllers.Rules",
-    "right_conditional"
+    "",
+    "R->"
   ],
     "Left Conjunction": [
-    "Controllers.Rules",
-    "left_conjunction"
+    "",
+    "L&"
   ],
   "Right Conjunction": [
-    "Controllers.Rules",
-    "right_conjunction"
+    "",
+    "R&"
   ],
     "Left Disjunction": [
-    "Controllers.Rules",
-    "left_disjunction"
+    "",
+    "Lv"
   ],
   "Right Disjunction": [
-    "Controllers.Rules",
-    "right_disjunction"
+    "",
+    "Rv"
   ]
 }

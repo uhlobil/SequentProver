@@ -87,15 +87,18 @@ class Menu:
             self.options.append(Option(str(option[0]), option[1]))
 
     def _clear(self):
+        """Print enough newlines to clear the terminal."""
         system("clear")
         print(self._separator)
 
     def _show_options(self):
+        """Print menu's options."""
         for i, option in enumerate(self.options):
             number = f"{str(i).rjust(2, ' ')}. "
             print(number, option.label)
 
     def _get_input(self):
+        """Handle retrieving input."""
         result = None
         try:
             choice = int(input(self.prompt))
@@ -106,6 +109,7 @@ class Menu:
         return result
 
     def _handle(self, choice):
+        """Handle choice"""
         if choice is not None:
             if isinstance(choice, str):
                 return choice

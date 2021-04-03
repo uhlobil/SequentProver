@@ -1,0 +1,14 @@
+{
+  "View Names":  [
+    "Objects.Names",
+    "view"
+  ],
+  "Add Name":  [
+    "Objects.Names",
+    "new"
+  ],
+  "Remove Name": [
+    "",
+    "remove_name"
+  ]
+}

@@ -1,7 +1,7 @@
 import os
 import shutil
 
-from Controllers.Menus.Main import MainMenu
+from Controllers.Menus.Handlers import main_menu
 from Controllers.Rules import Settings
 
 _main_dir = os.path.dirname(__file__)
@@ -15,7 +15,7 @@ def main():
         _initialize_file(file)
     _initialize_runs()
     Settings().update_output_file()
-    MainMenu().open()
+    main_menu()
 
 
 def _initialize_file(file_name):
@@ -50,47 +50,11 @@ Key:
 to read, etc. Usually a result of learning something new.
     Features -> Features to be implemented.
 
-Feature: Decomposition of Quantified Sequents
-    - [x] Prerequisite: a list (or whatever) containing each name in 
-    the language (each name ever used). Users can define new names as
-    they please in the main menu, but not during decomposition (as that 
-    might result in incomplete trees). 
-    - Universals: 
-        - Input string: "Forall(x)(Proposition(x))", 
-        "Forall(x)(Forall(y)(Proposition(x,y)))" 
-            - Risks: We need to make sure that the string-to-prop
-            converter doesn't get tripped up by this, as there are 
-            three sets of parentheses. We probably want a set around 
-            the whole thing and to seek "Forall" as the identifying 
-            string, then seek the next set of parentheses and find each
-            instance of the variable inside those (maybe including the 
-            parentheses themselves). 
-        - Output proposition: Universal(Proposition, ([var]))
-        where [var] is some procedurally generated unique (per root)
-        string that marks each variable bound by the quantifier.
-            - Risks: There's room for error when creating identifiers
-            and replacing parts of strings with them, especially with 
-            the current conversion converting propositions from the
-            inside out, so to speak. 
-        - Decomposition: 
-            - Left: User picks a name %N in Names.Multiplicative such 
-            that Universal(var, Proposition([var])) becomes 
-            Proposition([%N/var])
-            - Right: For each name %N in Names.Additive, we get a 
-            parent sequent which replaces Universal(var, Proposition([var]))
-            with Proposition([%N/var]). 
-    - Existentials:
-        - Input string: "Exists(x)(Proposition(x))"
-            - Risks: same as for universals
-        - Output proposition: Existential([var], [Proposition(var)])
-        where the same conditions and risks apply as for Universals
-        - Decomposition_backup:
-            - Left: For each name %N in Names.Additive, we get a 
-            parent sequent which replaces Existential(var, Proposition([var]))
-            with Proposition([%N/var])
-            - Right: User picks a name %N in Names.Multiplicative such 
-            that Existential(var, Proposition([var])) becomes 
-            Proposition([%N/var])
+Debt: Menus
+It's been on my mind how closely my menus are coupled to my 
+implementation here. After some research I've found a way to decouple
+them about as much as I can reasonably expect, but it requires a 
+menu overhaul.  
 
 Feature: Atom Viewer
 Add a menu option to view atomic sequents. Maybe allow grouping or 
@@ -98,6 +62,12 @@ sorting, depending on how difficult that looks. There might be some
 desire in viewing this in terms of a material base. For example, having
 the option to show "All sequents which contain [x proposition] as a
 premise," and other such searches. 
+
+Feature: Structural Rule: Permutation
+Have a switch that allows the user to choose at each stage of 
+decomposition which proposition in the sequent to decompose next. This
+will be important for decomposing sequents full of quantifiers, as
+the different rules will have different constraints on variables. 
 
 Feature Atom Vetter
 Add a submenu to the atom viewer that allows the user to decide which 
