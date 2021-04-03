@@ -13,12 +13,19 @@ current_dir = os.path.dirname(__file__)
 class TestMenus(unittest.TestCase):
     def setUp(self):
         self.menu = Menu()
+        self.mock_file = os.path.join(current_dir, "mocks", "Menus", "TestMenu.json")
 
-    def capture_menu_output(self, inputs):
+    def capture_menu_output(self, inputs: list):
+        """Helper method for capturing menu outputs.
+
+        @:param inputs: a list of ints representing desired menu options
+        (For results, last item should be enough 0s to exit the program.)
+        """
         with patch("builtins.input", side_effect=inputs):
             with patch("Controllers.Menus.Base.Menu._show_options",
                        new=lambda *args: print("")):
-                with patch("sys.stdout", new_callable=io.StringIO) as captured_out:
+                with patch("sys.stdout",
+                           new_callable=io.StringIO) as captured_out:
                     self.menu._separator = ""
                     self.menu.open()
                     return captured_out.getvalue().strip()
@@ -35,10 +42,12 @@ class TestMenus(unittest.TestCase):
         self.assertEqual("much wow", output)
 
     def test_basic_lambda_from_file(self):
-        mock_file = os.path.join(current_dir, "mocks", "Menus", "TestMenu.json")
-        self.menu.load(mock_file)
+        self.menu.load(self.mock_file)
         output = self.capture_menu_output(inputs=[1, 0])
         self.assertEqual("Lady", output)
+
+    def test_import_package_using_file(self):
+        self.menu.load(self.mock_file)
 
 
 if __name__ == '__main__':
