@@ -6,5 +6,9 @@
   "test_import_package_using_file": [
     "unit_tests.mocks.Objects",
     "test_function"
+  ],
+  "test_non_callable_options_return": [
+    "",
+    "'TEST_STRING'"
   ]
 }

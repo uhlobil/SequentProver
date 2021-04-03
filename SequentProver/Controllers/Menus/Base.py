@@ -1,7 +1,6 @@
 import json
 import importlib
 from collections import namedtuple
-from typing import Sequence
 from os import system
 
 
@@ -13,6 +12,16 @@ class Menu:
     options = []
 
     def __init__(self, file=None, options=None):
+        """Create and handle menu.
+
+        Menu's options are equal to whichever of file or options is not
+        none (preferring file if both are filled). If neither parameter
+        is passed, makes sure user can at least exit the menu by adding
+        an exit button.
+
+        :param file: a path to a json file as a string.
+        :param options: A sequence of 2-tuples, (label, command)
+        """
         self.alive = True
         self.prompt = "Please Select: \n"
         if file is not None:
@@ -25,10 +34,9 @@ class Menu:
             ]
 
     def open(self):
-        """Return None if chosen option is callable, else return its value."""
         self._clear()
         return_value = None
-        while self.alive is True:
+        while self.alive is True and return_value is None:
             self._show_options()
             choice = self._get_input()
             return_value = self._handle(choice)
@@ -51,8 +59,11 @@ class Menu:
             ],
             ...
         }
-        """
 
+        Lambdas and strings use "" as the function source package.
+        Strings have a "'second pair of single quotes'" around them
+        because I'm using eval().
+        """
         with open(file, "r") as target:
             file = json.load(target)
         options = []
@@ -62,7 +73,14 @@ class Menu:
             options.append(Option(label, function))
         self.extend(options)
 
-    def extend(self, options: Sequence):
+    def extend(self, options):
+        """Append options to list.
+
+        :param options: a sequence of 2-length sequences
+        options should look like (Label, Command). Label can be anything
+        that implements __str__ and command is either a string or a
+        callable (including lambdas).
+        """
         for option in options:
             if len(option) != 2:
                 raise IndexError(f"Option {option} must contain 2 items")
@@ -90,9 +108,9 @@ class Menu:
     def _handle(self, choice):
         if choice is not None:
             if isinstance(choice, str):
-                return str
+                return choice
             elif callable(choice):
-                choice()
+                return choice()
         else:
             self._clear()
         return None

@@ -2,7 +2,7 @@ import io
 import os
 import unittest
 from unittest.mock import patch
-from Controllers.Menus.Base import Menu, Option
+from Controllers.Menus.Base import Menu
 
 
 current_dir = os.path.dirname(__file__)
@@ -33,7 +33,7 @@ class TestMenus(unittest.TestCase):
 
     def test_menu_options(self):
         test_options = [
-            Option("wow", lambda *args: print("much wow")),
+            ("wow", lambda *args: print("much wow"))
         ]
         self.menu.extend(test_options)
         output = self.capture_menu_output(inputs=[1, 0])
@@ -46,8 +46,15 @@ class TestMenus(unittest.TestCase):
 
     def test_import_package_using_file(self):
         self.menu.load(self.mock_file)
-        a = self.menu.options[2].command()
-        self.assertEqual("test", a.prop)
+        with patch("builtins.input", return_value=2):
+            result = self.menu.open()
+            self.assertEqual("test", result.prop)
+
+    def test_non_callable_options_return(self):
+        self.menu.load(self.mock_file)
+        with patch("builtins.input", return_value=3):
+            result = self.menu.open()
+            self.assertEqual("TEST_STRING", result)
 
 
 if __name__ == '__main__':

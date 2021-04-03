@@ -10,7 +10,8 @@ _data_dir = os.path.join(_current_dir, "..", "..", "data")
 def view_runs():
     runs_dir = os.path.join(_data_dir, "Runs")
     option_list = [file for file in os.listdir(runs_dir)]
-    view_menu = Menu(options=option_list)
+    label_list = [file for file in option_list]
+    view_menu = Menu(options=zip(label_list, option_list))
     view_menu.open()
 
 
@@ -27,7 +28,13 @@ def change_single():
 
 
 def change_multiple():
-    pass
+    rule_file = os.path.join(_data_dir, "Menus", "ChangeMultiple.json")
+    rules_menu = Menu(file=rule_file)
+    group = rules_menu.open()
+
+    mode_file = os.path.join(_data_dir, "Menus", "ChangeMode.json")
+    mode_menu = Menu(file=mode_file)
+    mode = mode_menu.open()
 
 
 def change_structure():
