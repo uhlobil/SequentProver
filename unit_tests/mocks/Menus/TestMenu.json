@@ -1,8 +1,7 @@
 {
   "options": {
-    "Lady": "lambda: print('Lady')"
+    "test_basic_lambda_from_file": "lambda: print('Lady')"
   },
   "packages": {
-    "Objects.Sequents": "Sequent"
   }
 }
