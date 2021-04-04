@@ -1,7 +1,9 @@
+import json
 import os
 
 from Controllers.Menus.Base import Menu
 from Controllers import Rules
+from Objects import Names
 
 
 _current_dir = os.path.dirname(__file__)
@@ -62,9 +64,16 @@ def change_structure():
 
 def names_menu():
     """Handle menu for viewing/changing names."""
-    pass
+    menu_file = os.path.join(_data_dir, "Menus", "ViewNames.json")
+    menu = Menu(file=menu_file)
+    menu.open()
 
 
 def remove_name():
     """Remove selected name from Names.json."""
-    pass
+    names_file = os.path.join(_data_dir, "Names.json")
+    with open(names_file, "r") as file:
+        names = json.load(file)
+    menu = Menu(options=names)
+    selection = menu.open()
+    Names.remove(selection)
