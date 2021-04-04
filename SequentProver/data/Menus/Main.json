@@ -8,15 +8,15 @@
     "decompose_sequents"
   ],
   "View Runs": [
-    "",
+    "Controllers.Menus.Handlers",
     "view_runs"
   ],
   "Change Rules": [
-    "",
+    "Controllers.Menus.Handlers",
     "change_rules"
   ],
   "Check/Change Names": [
-    "",
+    "Controllers.Menus.Handlers",
     "names_menu"
   ],
 
