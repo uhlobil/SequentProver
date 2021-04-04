@@ -210,6 +210,17 @@ class TestQuantifiers(unittest.TestCase):
         d = Existential("a", Universal("b", Atom("Saturated", ("a", "a", "b"))))
         self.assertNotEqual(c, d)
 
+    def test_nested_quantifier_string(self):
+        expected = "forall(x)(exists(y)(Nested(x; y)))"
+        actual = str(Universal("x", Existential("y", Atom("Nested", ("x", "y")))))
+        self.assertEqual(expected, actual)
+
+    def test_nested_quantifier_from_string(self):
+        string = "(forall(x)(exists(y)(Nested(x; y))))"
+        actual = String(string).to_proposition()
+        expected = Universal("x", Existential("y", Atom("Nested", ("x", "y"))))
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()

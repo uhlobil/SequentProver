@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='MaterialInference',
     version='0.1',
-    packages=['View', 'Objects', 'Adapters', 'Controllers', 'Controllers.Menus'],
+    packages=['Controllers', 'Objects', 'Propositions', 'View'],
     package_dir={'': 'SequentProver'},
     url='https://github.com/LogicalExpressivism/SequentProver',
     license='',

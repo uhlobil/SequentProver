@@ -104,11 +104,11 @@ class String:
 
     def _proposition(self):
         """Gets the type and location of the main connective."""
-        if not self.contains_quantifier:
+        if self.contains_quantifier:
+            return self._create_quantified()
+        else:
             word, index = self._proposition_location()
             return self._create_sentential(word, index)
-        else:
-            return self._create_quantified()
 
     def _create_quantified(self):
         quantifier = quantifiers[self.data[:6]]

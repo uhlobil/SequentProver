@@ -12,4 +12,4 @@ human(Socrates) |~ mortal(Socrates)
 ((Albert or Betty) implies (Carol and Daniel)) |~
 ((not (A implies B)) and (C and (not D))), ((B or (not A)) or ((C and E) implies D)) |~ (not E)
 |~ (forall(x)(Human(x) implies Mortal(x)))
-(forall(x)(Spicy(x) or exists(y)(not Eats(y, x)))) |~ (exists(z)(Eats(z)))
+(forall(x)(Spicy(x) or exists(y)(not Eats(y; x)))) |~ (exists(z)(Eats(z)))
