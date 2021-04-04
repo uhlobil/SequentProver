@@ -221,6 +221,16 @@ class TestQuantifiers(unittest.TestCase):
         expected = Universal("x", Existential("y", Atom("Nested", ("x", "y"))))
         self.assertEqual(expected, actual)
 
+    def test_nested_quantifier_with_unquantified(self):
+        string = "(exists(x)(Tasty(x) and exists(y)(Eats(y, x))))"
+        actual = String(string).to_proposition()
+        expected = Existential("x",
+                               Conjunction(
+                                   Atom("Tasty", ("x",)),
+                                   Existential("y",
+                                               Atom("Eats", ("x", "y")))))
+        self.assertEqual(expected, actual)
+
 
 if __name__ == '__main__':
     unittest.main()
