@@ -104,10 +104,10 @@ class String:
 
     def _proposition(self):
         """Gets the type and location of the main connective."""
-        if self.contains_quantifier:
+        word, index = self._proposition_location()
+        if word in quantifiers:
             return self._create_quantified()
         else:
-            word, index = self._proposition_location()
             return self._create_sentential(word, index)
 
     def _create_quantified(self):
@@ -136,10 +136,16 @@ class String:
 
     def _proposition_location(self):
         degree = 0
+        location = None
         for index, word in enumerate(self.data.split(" ")):
             degree += _word_degree(word)
             if degree == 0 and word in connectives.keys():
-                return word, index
+                location = word, index
+                break
+        else:
+            assert self.data[:6] in quantifiers
+            location = self.data[:6], 0
+        return location
 
     def _deparen(self):
         """Removes all connected sets of outer parentheses in

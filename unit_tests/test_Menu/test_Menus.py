@@ -11,7 +11,7 @@ current_dir = os.path.dirname(__file__)
 class TestMenus(unittest.TestCase):
     def setUp(self):
         self.menu = Menu()
-        self.mock_file = os.path.join(current_dir, "mocks", "Menus", "TestMenu.json")
+        self.mock_file = os.path.join(current_dir, "../mocks", "Menus", "TestMenu.json")
 
     def capture_menu_stdout(self, inputs: list):
         """Helper method for capturing menu outputs.

@@ -114,7 +114,7 @@ class Menu:
             if isinstance(choice, str):
                 return choice
             elif callable(choice):
-                return choice()
+                choice()
         else:
             self._clear()
         return None

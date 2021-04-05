@@ -15,6 +15,12 @@ class TestConvert(unittest.TestCase):
         with self.assertRaises(ValueError):
             String("A implies B").to_sequent()
 
+    def test_proposition_location_for_quantified_propositions(self):
+        string = "exists(x)(found(x))"
+        converter = String(string)
+        expected = "exists", 0
+        self.assertEqual(expected, converter._proposition_location())
+
 
 class TestAtoms(unittest.TestCase):
     prop = Atom("Predicate", ("alpha", "beta", "gamma"))
@@ -222,13 +228,12 @@ class TestQuantifiers(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_nested_quantifier_with_unquantified(self):
-        string = "(exists(x)(Tasty(x) and exists(y)(Eats(y, x))))"
+        string = "(exists(x)(Tasty(x) and exists(y)(Eats(y; x))))"
         actual = String(string).to_proposition()
         expected = Existential("x",
                                Conjunction(
                                    Atom("Tasty", ("x",)),
-                                   Existential("y",
-                                               Atom("Eats", ("x", "y")))))
+                                   Existential("y", Atom("Eats", ("y", "x")))))
         self.assertEqual(expected, actual)
 
 
