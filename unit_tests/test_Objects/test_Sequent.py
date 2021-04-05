@@ -170,6 +170,7 @@ class TestNonInvertibleDecomp(unittest.TestCase):
         self.assertEqual(Sequent([], [Atom("Predicate", ("Adrian",))]), decomp[0][0])
         self.assertEqual(Sequent([], [Atom("Predicate", ("Eve",))]), decomp[1][0])
 
+    # TODO: test_nested_quantified_sequents
 
 if __name__ == '__main__':
     unittest.main()

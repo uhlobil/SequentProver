@@ -1,0 +1,10 @@
+{
+  "Exit": [
+    "",
+    "self.exit"
+  ],
+  "Delete Runs": [
+    "Controllers.Menus.Handlers",
+    "delete_runs_confirm"
+  ]
+}

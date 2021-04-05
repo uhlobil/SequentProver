@@ -1,6 +1,5 @@
 from collections import UserString
 
-from Controllers.Menus.Base import Menu
 from Controllers.Settings import Settings
 from Objects.Sequents import Sequent
 from Objects.Trees import Tree
@@ -126,6 +125,8 @@ class Key(UserString):
         self.last = self.data[-1]
         self.cognate_space = self.data[-4:-1]
         self.last_four = self.locations[-1]
+        self.has_partner = True if self.last in {"L", "R"} else False
+        self.is_invertible = True if self.cognate_space == "000" else False
 
     def __repr__(self) -> str:
         return f"Key({self.data})"
@@ -142,14 +143,6 @@ class Key(UserString):
         return False
 
     @property
-    def has_partner(self) -> bool:
-        """Returns a bool representing whether this key is the result
-        of a 2-parent rule."""
-        if self.last in {"L", "R"}:
-            return True
-        return False
-
-    @property
     def partner(self):
         """Returns this key's partner, or None if it has no partner"""
         if self.has_partner:
@@ -161,12 +154,6 @@ class Key(UserString):
             return self._partner
         else:
             return None
-
-    @property
-    def is_invertible(self):
-        if self.cognate_space == "000":
-            return True
-        return False
 
     def cognates(self, key_list):
         for key in key_list:
@@ -191,14 +178,3 @@ def display(tree):
     display_tree = Display(tree)
     display_tree.populate()
     display_tree.display()
-
-
-class Explosion(Menu):
-    """Menu for selecting between cognates during display."""
-
-    def __init__(self, options, *message):
-        super().__init__(message[0])
-        self.options = options
-
-    def run(self, selection):
-        return selection

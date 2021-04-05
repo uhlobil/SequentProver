@@ -78,3 +78,10 @@ def Settings():
 
 def update_input_file():
     Settings().update_input_file()
+
+
+def delete_runs_files():
+    runs_dir = os.path.join(_current_dir, "..", "data", "Runs")
+    for file in os.listdir(runs_dir):
+        run = os.path.join(runs_dir, file)
+        os.remove(run)

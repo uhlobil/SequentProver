@@ -1,0 +1,10 @@
+{
+  "No. Don't delete my runs.": [
+    "",
+    "self.exit"
+  ],
+  "Yes. Delete all runs.": [
+    "Controllers.Settings",
+    "delete_runs_files"
+  ]
+}
