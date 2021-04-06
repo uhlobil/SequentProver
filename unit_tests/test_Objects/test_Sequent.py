@@ -170,7 +170,55 @@ class TestNonInvertibleDecomp(unittest.TestCase):
         self.assertEqual(Sequent([], [Atom("Predicate", ("Adrian",))]), decomp[0][0])
         self.assertEqual(Sequent([], [Atom("Predicate", ("Eve",))]), decomp[1][0])
 
-    # TODO: test_nested_quantified_sequents
+    def test_nested_quantified_sequents(self):
+        """forall(x)(exists(y)(Predicate(x; y)) |~"""
+        sequent = Sequent(
+            [Universal("alpha",
+                       Existential("beta",
+                                   Atom("Predicate",
+                                        ("alpha", "beta"))
+                                   )
+                       )],
+            []
+        )
+        with patch("json.load", lambda *args: self.names):
+            decomp = sequent.decompose()
+        self.assertEqual(
+            Sequent([Existential("beta", Atom("Predicate", ("Adrian", "beta")))], []),
+            decomp[0][0]
+        )
+        self.assertEqual(
+            Sequent([Existential("beta", Atom("Predicate", ("Eve", "beta")))], []),
+            decomp[1][0]
+        )
+
+    def test_complex_quantified_sequent(self):
+        sequent = Sequent(
+            [Existential(
+                "alpha",
+                Conjunction(
+                    Universal(
+                        "beta",
+                        Atom("Predicate", ("alpha", "beta"))
+                    ),
+                    Atom("AnotherPredicate", ("alpha",))
+                ))],
+            [])
+        with patch("json.load", lambda *args: self.names):
+            decomp = sequent.decompose()
+        self.assertEqual(
+            Sequent(
+                [
+                    Conjunction(
+                        Universal("beta", Atom("Predicate", ("Adrian", "beta"))),
+                        Atom("AnotherPredicate", ("Adrian",))
+                    )
+                ],
+                []
+            ),
+            decomp[0][0]
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

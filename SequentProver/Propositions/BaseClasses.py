@@ -3,6 +3,10 @@ from typing import Sequence
 
 
 class Proposition:
+    """Superclass for all propositions.
+
+    This class exists mostly for typing support.
+    """
     pass
 
 
@@ -52,8 +56,10 @@ class Unary(Proposition):
         return 1 + self.prop.complexity
 
     def instantiate(self, var, name):
-        prop = self.prop.instantiate(var, name)
-        return self.__class__(prop)
+        instantiated = self.prop.instantiate(var, name)
+        if isinstance(self.prop, Quantifier):
+            instantiated = self.prop.__class__(self.prop.var, instantiated)
+        return self.__class__(instantiated)
 
 
 class Binary(Proposition):
@@ -112,9 +118,13 @@ class Binary(Proposition):
         return 1 + self.left.complexity + self.right.complexity
 
     def instantiate(self, var, name):
-        left = self.left.instantiate(var, name)
-        right = self.right.instantiate(var, name)
-        return self.__class__(left, right)
+        sides = []
+        for prop in self:
+            instantiated = prop.instantiate(var, name)
+            if isinstance(prop, Quantifier):
+                instantiated = prop.__class__(prop.var, instantiated)
+            sides.append(instantiated)
+        return self.__class__(*sides)
 
 
 class Quantifier(Proposition):
@@ -176,14 +186,13 @@ class Quantifier(Proposition):
         return 1 + self.prop.complexity
 
     def instantiate(self, var, name):
+        instantiated = self.prop.instantiate(var, name)
         if isinstance(self.prop, Quantifier):
-            inner_prop = self.prop
-            instantiated = inner_prop.instantiate(var, name)
-            return inner_prop.__class__(inner_prop.var, instantiated)
-        else:
-            return self.prop.instantiate(var, name)
+            instantiated = self.prop.__class__(self.prop.var, instantiated)
+        return instantiated
 
-    def _name_generator(self):
+    @staticmethod
+    def _name_generator():
         """Produces 2-character combinations of lowercase letters from
         aaa to zzz in order."""
         for i in itertools.product(map(chr, range(97, 123)), repeat=2):
