@@ -4,7 +4,7 @@ import os
 from Controllers.Menus.Base import Menu
 from Controllers import Rules
 from Objects import Names
-
+from View import DisplayTrees
 
 _current_dir = os.path.dirname(__file__)
 _data_dir = os.path.join(_current_dir, "..", "..", "data")
@@ -23,8 +23,14 @@ def view_run(run):
     run_file = os.path.join(_runs_dir, run)
     with open(run_file, "r") as file:
         forest = json.load(file)
-    forest_menu = Menu()
-    # TODO: Fill forest_menu with trees in the file
+
+    def command(d):
+        DisplayTrees.display(d)
+
+    forest_menu = Menu(options=[
+        (x, lambda *args: command(y)) for x, y in forest.items()
+    ])
+    forest_menu.open()
 
 
 def view_runs():

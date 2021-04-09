@@ -174,7 +174,7 @@ class Key(UserString):
         return False
 
 
-def display(tree):
+def display(tree: dict):
     display_tree = Display(tree)
     display_tree.populate()
     display_tree.display()
