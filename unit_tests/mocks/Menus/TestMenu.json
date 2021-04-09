@@ -1,7 +1,7 @@
 {
   "test_basic_lambda_from_file": [
     "",
-    "lambda: 5+9"
+    "lambda: 5 + 9"
   ],
   "test_import_package_using_file": [
     "unit_tests.mocks.Objects",

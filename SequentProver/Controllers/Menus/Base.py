@@ -120,6 +120,6 @@ class Menu:
             if isinstance(choice, str):
                 result = choice
             elif callable(choice):
-                choice()
+                result = choice()
         self._clear()
         return result
