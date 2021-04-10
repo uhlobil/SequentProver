@@ -1,5 +1,6 @@
 from collections import UserString
 
+from Controllers.Menus.Base import Menu
 from Controllers.Settings import Settings
 from Objects.Sequents import Sequent
 from Objects.Trees import Tree
@@ -80,17 +81,19 @@ class Display:
         if len(filtered_options) == 1:
             self._add_to_display_list(filtered_options[0])
         else:
-            self._open_explosion_menu(filtered_options)
+            option = self._select_explosion_child(filtered_options)
+            self._add_to_display_list(option)
 
-    def _open_explosion_menu(self, option_keys) -> None:
-        options = [self.tree[str(key)] for key in option_keys]
-        message = self._explosion_message(option_keys[0])
-        selection = Explosion(options, message).get()
+    def _select_explosion_child(self, option_keys):
+        keys = [self.tree[str(key)] for key in option_keys]
+        options = [(k, i) for i, k in enumerate(keys)]
+        menu = Menu(options=options, close_after_choice=True)
+        menu.prompt = self._explosion_message(option_keys[0])
+        selection = menu.open()
         if selection is None:
-            self.exit = True
+            self._exit = True
             return
-        key = Key(option_keys[selection - 1])
-        self._add_to_display_list(key)
+        return Key(option_keys[selection - 1])
 
     def _explosion_message(self, key) -> str:
         parent_sequent = self.tree[key.parent]
@@ -99,7 +102,7 @@ class Display:
             variable = " left"
         elif key.last == "R":
             variable = " right"
-        return f"Select desired{variable} child of {parent_sequent}"
+        return f"Select desired{variable} child of {parent_sequent}: \n"
 
     def _format_rule(self, key) -> str:
         if key.parent:
