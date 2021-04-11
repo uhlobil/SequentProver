@@ -37,7 +37,6 @@ class Display:
 
     def display(self) -> None:
         if not self._exit:
-            print(self._separator)
             sorted_keys = sorted([key for key in self.display_list])
             for line, key in enumerate(sorted_keys):
                 self._draw_line(line, key)
@@ -82,18 +81,19 @@ class Display:
             self._add_to_display_list(filtered_options[0])
         else:
             option = self._select_explosion_child(filtered_options)
-            self._add_to_display_list(option)
+            if option is not None:
+                self._add_to_display_list(option)
 
     def _select_explosion_child(self, option_keys):
-        keys = [self.tree[str(key)] for key in option_keys]
-        options = [(k, i) for i, k in enumerate(keys)]
-        menu = Menu(options=options, close_after_choice=True)
+        keys = [(self.tree[str(key)], key) for key in option_keys]
+        menu = Menu(close_after_choice=True)
+        menu.extend(keys)
         menu.prompt = self._explosion_message(option_keys[0])
         selection = menu.open()
         if selection is None:
             self._exit = True
             return
-        return Key(option_keys[selection - 1])
+        return Key(selection)
 
     def _explosion_message(self, key) -> str:
         parent_sequent = self.tree[key.parent]
@@ -177,7 +177,8 @@ class Key(UserString):
         return False
 
 
-def display(tree: dict):
+def display(dictionary: dict):
+    tree = Tree(dictionary["0000"], source=dictionary)
     display_tree = Display(tree)
     display_tree.populate()
     display_tree.display()

@@ -9,7 +9,7 @@ from Objects.Sequents import Sequent
 
 class Tree(MutableMapping):
 
-    def __init__(self, sequent: Union[Sequent, str]):
+    def __init__(self, sequent: Union[Sequent, str], source=None):
         if isinstance(sequent, str):
             sequent = String(sequent).to_sequent()
         if not isinstance(sequent, Sequent):
@@ -18,6 +18,8 @@ class Tree(MutableMapping):
         self.update({'0000': sequent})
         self.root = self.leaves['0000']
         self.has_been_truncated = False
+        if source is not None:
+            self.fill_with(tree)
 
     def __repr__(self):
         return f"Tree({self.root})"

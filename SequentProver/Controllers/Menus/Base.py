@@ -16,12 +16,14 @@ class Menu:
         Menu's options are equal to whichever of file or options is not
         none (preferring file if both are filled). If neither parameter
         is passed, makes sure user can at least exit the menu by adding
-        an exit button.
+        an exit button. Including an exit button can thus be done by
+        either adding one manually to the input source or creating the
+        menu without any input source and extending it with options.
 
         :param file: a path to a json file as a string.
         :param options: A sequence of 2-tuples, (label, command)
-        :param close_after_choice: boolean, whether self.exit is
-        invoked after a selection is made.
+        :param close_after_choice: boolean, whether self.exit is called
+        after a selection is made.
         """
         self.prompt = "Please Select: \n"
         self.alive = True

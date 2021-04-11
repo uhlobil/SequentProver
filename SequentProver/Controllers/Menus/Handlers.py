@@ -24,11 +24,9 @@ def view_run(run):
     with open(run_file, "r") as file:
         forest = json.load(file)
 
-    def command(d):
-        DisplayTrees.display(d)
-
-    forest_menu = Menu(options=[
-        (x, lambda *args: command(y)) for x, y in forest.items()
+    forest_menu = Menu()
+    forest_menu.extend([
+        (x, lambda *args: DisplayTrees.display(y)) for x, y in forest.items()
     ])
     forest_menu.open()
 
