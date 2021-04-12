@@ -10,7 +10,7 @@ Option = namedtuple("Option", "label, command")
 class Menu:
     _separator = "=" * 78
 
-    def __init__(self, file=None, options=None, close_after_choice=False):
+    def __init__(self, file=None, options=None):
         """Create and handle menu.
 
         Menu's options are equal to whichever of file or options is not
@@ -22,13 +22,12 @@ class Menu:
 
         :param file: a path to a json file as a string.
         :param options: A sequence of 2-tuples, (label, command)
-        :param close_after_choice: boolean, whether self.exit is called
-        after a selection is made.
         """
         self.prompt = "Please Select: \n"
         self.alive = True
         self.options = []
-        self.close_after_choice = close_after_choice
+        self.close_after_choice = False
+        self.clear_after_print = False
         if file is not None:
             self.load(file)
         elif options is not None:
@@ -39,7 +38,8 @@ class Menu:
             ]
 
     def open(self):
-        self._clear()
+        if self.clear_after_print:
+            self._clear()
         return_value = None
         while self.alive is True and return_value is None:
             self._show_options()
@@ -123,5 +123,6 @@ class Menu:
                 result = choice
             elif callable(choice):
                 result = choice()
-        self._clear()
+        if self.clear_after_print:
+            self._clear()
         return result

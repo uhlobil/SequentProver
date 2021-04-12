@@ -24,6 +24,7 @@ def view_run(run):
     with open(run_file, "r") as file:
         forest = json.load(file)
     forest_menu = Menu()
+    forest_menu.clear_after_print = False
 
     def display(t):
         return lambda: DisplayTrees.display(t)
@@ -37,7 +38,8 @@ def view_run(run):
 def view_runs():
     """Handle menu for viewing runs."""
     menu_file = os.path.join(_data_dir, "Menus", "View_Runs.json")
-    view_menu = Menu(file=menu_file, close_after_choice=True)
+    view_menu = Menu(file=menu_file)
+    view_menu.close_after_choice = True
     option_list = [file for file in os.listdir(_runs_dir)]
     label_list = [file for file in option_list]
     view_menu.extend(zip(label_list, option_list))
@@ -102,5 +104,6 @@ def remove_name():
 def delete_runs_confirm():
     """Confirm user wants to delete contents of Runs directory."""
     menu_file = os.path.join(_data_dir, "Menus", "Confirm_DeleteRuns.json")
-    menu = Menu(file=menu_file, close_after_choice=True)
+    menu = Menu(file=menu_file)
+    menu.close_after_choice = True
     menu.open()
