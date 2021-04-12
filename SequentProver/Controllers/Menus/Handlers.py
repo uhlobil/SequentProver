@@ -23,11 +23,14 @@ def view_run(run):
     run_file = os.path.join(_runs_dir, run)
     with open(run_file, "r") as file:
         forest = json.load(file)
-
     forest_menu = Menu()
-    forest_menu.extend([
-        (x, lambda *args: DisplayTrees.display(y)) for x, y in forest.items()
-    ])
+
+    def display(t):
+        return lambda: DisplayTrees.display(t)
+
+    callable_options = map(display, forest.values())
+    option_list = zip(forest.keys(), callable_options)
+    forest_menu.extend(option_list)
     forest_menu.open()
 
 

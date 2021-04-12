@@ -19,7 +19,7 @@ class Tree(MutableMapping):
         self.root = self.leaves['0000']
         self.has_been_truncated = False
         if source is not None:
-            self.fill_with(tree)
+            self.fill_with(source)
 
     def __repr__(self):
         return f"Tree({self.root})"
