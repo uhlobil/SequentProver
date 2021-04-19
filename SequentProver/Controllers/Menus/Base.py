@@ -50,7 +50,7 @@ class Menu:
     def exit(self):
         self.alive = False
 
-    def load(self, file: str):
+    def load(self, path: str):
         """Fill the menu with the contents of (json) file
 
         Format the file thus:
@@ -69,10 +69,10 @@ class Menu:
         Strings have a "'second pair of single quotes'" around them
         because I'm using eval().
         """
-        with open(file, "r") as target:
-            file = json.load(target)
+        with open(path, "r") as file:
+            option_dict = json.load(file)
         options = []
-        for label, contents in file.items():
+        for label, contents in option_dict.items():
             module = importlib.import_module(contents[0]) if contents[0] else None
             function = getattr(module, contents[1]) if module else eval(contents[1])
             options.append(Option(label, function))
@@ -119,10 +119,10 @@ class Menu:
         if choice is not None:
             if self.close_after_choice:
                 self.exit()
-            if isinstance(choice, str):
-                result = choice
-            elif callable(choice):
+            if callable(choice):
                 result = choice()
+            else:
+                result = choice
         if self.clear_after_print:
             self._clear()
         return result
