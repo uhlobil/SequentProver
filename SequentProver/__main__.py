@@ -50,12 +50,6 @@ Key:
 to read, etc. Usually a result of learning something new.
     Features -> Features to be implemented.
 
-Debt: Menus
-It's been on my mind how closely my menus are coupled to my 
-implementation here. After some research I've found a way to decouple
-them about as much as I can reasonably expect, but it requires a 
-menu overhaul.  
-
 Feature: Atom Viewer
 Add a menu option to view atomic sequents. Maybe allow grouping or 
 sorting, depending on how difficult that looks. There might be some

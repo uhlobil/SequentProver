@@ -52,7 +52,8 @@ def change_rules():
     """Handle menu for changing rules."""
     menu_file = os.path.join(_data_dir, "Menus", "Change_RulesSuperMenu.json")
     rules_menu = Menu(file=menu_file)
-    rules_menu.open()
+    if rules_menu:
+        rules_menu.open()
 
 
 def change_single():
@@ -60,7 +61,8 @@ def change_single():
     menu_file = os.path.join(_data_dir, "Menus", "Change_SingleRule.json")
     rule_menu = Menu(file=menu_file)
     rule = rule_menu.open()
-    Rules.change_single(rule)
+    if rule:
+        Rules.change_single(rule)
 
 
 def change_multiple():
@@ -72,8 +74,8 @@ def change_multiple():
     mode_file = os.path.join(_data_dir, "Menus", "Change_RuleMode.json")
     mode_menu = Menu(file=mode_file)
     mode = mode_menu.open()
-
-    Rules.change_multiple(group, mode)
+    if group and mode:
+        Rules.change_multiple(group, mode)
 
 
 def change_structure():
@@ -81,7 +83,8 @@ def change_structure():
     menu_file = os.path.join(_data_dir, "Menus", "Change_StructuralRule.json")
     menu = Menu(file=menu_file)
     rule = menu.open()
-    Rules.change_structure(rule)
+    if rule:
+        Rules.change_structure(rule)
 
 
 def names_menu():
@@ -95,10 +98,13 @@ def remove_name():
     """Remove selected name from Names.json."""
     names_file = os.path.join(_data_dir, "Names.json")
     with open(names_file, "r") as file:
-        names = json.load(file)
-    menu = Menu(options=names)
+        name_list = json.load(file)
+        options = [(name, name) for name in name_list]
+    menu = Menu()
+    menu.extend(options)
     selection = menu.open()
-    Names.remove(selection)
+    if selection:
+        Names.remove(selection)
 
 
 def delete_runs_confirm():

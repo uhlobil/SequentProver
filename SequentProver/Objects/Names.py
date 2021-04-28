@@ -1,16 +1,17 @@
 import json
 import os
 
-names_path = os.path.join("SequentProver", "data", "Names.json")
+_current_dir = os.path.dirname(__file__)
+_names_path = os.path.join(_current_dir, "..", "data", "Names.json")
 
 
 def load() -> list:
-    with open(names_path, "r") as file:
+    with open(_names_path, "r") as file:
         return json.load(file)
 
 
 def write_names(new_names) -> None:
-    with open(names_path, "w") as file:
+    with open(_names_path, "w") as file:
         file.write(json.dumps(new_names, indent=4))
 
 
@@ -20,7 +21,7 @@ def view() -> None:
         print(name)
 
 
-def new(name_list) -> None:
+def new() -> None:
     names = set(load())
     name = input("Enter New Name:\n")
     if name not in names:
@@ -29,7 +30,11 @@ def new(name_list) -> None:
 
 
 def remove(name):
-    pass
+    with open(_names_path, "r") as file:
+        names: list = json.load(file)
+    names.remove(name)
+    with open(_names_path, "w") as file:
+        file.write(json.dumps(names, indent=4))
 
 
 info = """

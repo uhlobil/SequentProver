@@ -4,15 +4,15 @@
     "self.exit"
   ],
   "Change Single Rule": [
-    "",
+    "Controllers.Menus.Handlers",
     "change_single"
   ],
   "Change Multiple Rules": [
-    "",
+    "Controllers.Menus.Handlers",
     "change_multiple"
   ],
   "Change Structural Rule": [
-    "",
+    "Controllers.Menus.Handlers",
     "change_structure"
   ]
 }

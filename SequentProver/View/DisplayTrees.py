@@ -86,7 +86,8 @@ class Display:
 
     def _select_explosion_child(self, option_keys):
         keys = [(self.tree[str(key)], key) for key in option_keys]
-        menu = Menu(close_after_choice=True)
+        menu = Menu()
+        menu.close_after_choice = True
         menu.extend(keys)
         menu.prompt = self._explosion_message(option_keys[0])
         selection = menu.open()

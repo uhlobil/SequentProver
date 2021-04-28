@@ -1,4 +1,8 @@
 {
+  "Exit": [
+    "",
+    "self.exit"
+  ],
   "View Names":  [
     "Objects.Names",
     "view"
@@ -8,7 +12,7 @@
     "new"
   ],
   "Remove Name": [
-    "",
+    "Controllers.Menus.Handlers",
     "remove_name"
   ]
 }

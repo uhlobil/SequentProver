@@ -9,22 +9,22 @@
   ],
   "Right Conditional": [
     "",
-    "R->"
+    "'R->'"
   ],
     "Left Conjunction": [
     "",
-    "L&"
+    "'L&'"
   ],
   "Right Conjunction": [
     "",
-    "R&"
+    "'R&'"
   ],
     "Left Disjunction": [
     "",
-    "Lv"
+    "'Lv'"
   ],
   "Right Disjunction": [
     "",
-    "Rv"
+    "'Rv'"
   ]
 }
