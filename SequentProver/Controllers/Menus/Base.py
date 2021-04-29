@@ -9,6 +9,7 @@ Option = namedtuple("Option", "label, command")
 
 class Menu:
     _separator = "=" * 78
+    message = None
 
     def __init__(self, file=None, options=None):
         """Create and handle menu.
@@ -98,6 +99,8 @@ class Menu:
 
     def _show_options(self):
         """Print menu's options."""
+        if self.message:
+            print(self.message)
         for i, option in enumerate(self.options):
             number = f"{str(i).rjust(2, ' ')}. "
             print(number, option.label)

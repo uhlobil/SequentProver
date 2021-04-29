@@ -3,6 +3,7 @@ import os
 
 from Controllers.Menus.Base import Menu
 from Controllers import Rules
+from Controllers.Settings import Settings
 from Objects import Names
 from View import DisplayTrees
 
@@ -15,6 +16,7 @@ def main_menu():
     """Handle main menu."""
     menu_file = os.path.join(_data_dir, "Menus", "Main.json")
     main = Menu(file=menu_file)
+    Settings().print_rules()
     main.open()
 
 
@@ -52,14 +54,15 @@ def change_rules():
     """Handle menu for changing rules."""
     menu_file = os.path.join(_data_dir, "Menus", "Change_RulesSuperMenu.json")
     rules_menu = Menu(file=menu_file)
-    if rules_menu:
-        rules_menu.open()
+    Settings().print_rules()
+    rules_menu.open()
 
 
 def change_single():
     """Change single rule."""
     menu_file = os.path.join(_data_dir, "Menus", "Change_SingleRule.json")
     rule_menu = Menu(file=menu_file)
+    Settings().print_rules()
     rule = rule_menu.open()
     if rule:
         Rules.change_single(rule)
@@ -69,6 +72,7 @@ def change_multiple():
     """Change multiple rules."""
     rule_file = os.path.join(_data_dir, "Menus", "Change_MultipleRules.json")
     rules_menu = Menu(file=rule_file)
+    Settings().print_rules()
     group = rules_menu.open()
 
     mode_file = os.path.join(_data_dir, "Menus", "Change_RuleMode.json")
@@ -82,6 +86,7 @@ def change_structure():
     """Change structural rule."""
     menu_file = os.path.join(_data_dir, "Menus", "Change_StructuralRule.json")
     menu = Menu(file=menu_file)
+    Settings().print_rules()
     rule = menu.open()
     if rule:
         Rules.change_structure(rule)
