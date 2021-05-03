@@ -39,15 +39,21 @@ def view_run(run):
 
 def view_runs():
     """Handle menu for viewing runs."""
+    def set_options(menu, file):
+        option_list = [option for option in os.listdir(_runs_dir)]
+        label_list = [label for label in option_list]
+        menu.options = []
+        menu.load(file)
+        menu.extend(zip(label_list, option_list))
+
     menu_file = os.path.join(_data_dir, "Menus", "View_Runs.json")
-    view_menu = Menu(file=menu_file)
+    view_menu = Menu()
     view_menu.close_after_choice = True
-    option_list = [file for file in os.listdir(_runs_dir)]
-    label_list = [file for file in option_list]
-    view_menu.extend(zip(label_list, option_list))
+    set_options(view_menu, menu_file)
     run = view_menu.open()
     if run is not None:
         view_run(run)
+        set_options(view_menu, menu_file)
 
 
 def change_rules():

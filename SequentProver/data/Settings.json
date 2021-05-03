@@ -15,6 +15,6 @@
     },
     "Contraction": false,
     "Reflexivity": true,
-    "Input File": "/Users/QA_15460/Desktop/PycharmProjects/SequentProver/SequentProver/data/Presets/Input/DefaultSequents.txt",
-    "Output File": "2021-04-29-08-54-39.json"
+    "Input File": "/Users/adrian.mac/Projects/MaterialInference/SequentProver/data/Presets/Input/DefaultSequents.txt",
+    "Output File": "2021-05-03-18-39-05.json"
 }

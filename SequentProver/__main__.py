@@ -21,8 +21,8 @@ def main():
 def _initialize_file(file_name):
     file_path = os.path.join(_data_path, file_name)
     if not os.path.exists(file_path):
-        ftue_file = os.path.join(_ftue_path, file_name)
-        shutil.copy(ftue_file, file_path)
+        _ftue_file = os.path.join(_ftue_path, file_name)
+        shutil.copy(_ftue_file, file_path)
 
 
 def _initialize_runs():
