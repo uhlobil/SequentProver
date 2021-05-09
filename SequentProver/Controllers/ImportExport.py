@@ -91,7 +91,7 @@ class Decompose:
         Export(forest).to_atoms()
 
 
-def _name_file_is_empty():
+def _names_file_is_empty():
     names_file = os.path.join(_current_path, "..", "data", "Names.json")
     with open(names_file) as file:
         names = json.load(file)
@@ -102,7 +102,7 @@ def _name_file_is_empty():
 
 def decompose_sequents():
     input_file = Settings()["Input File"]
-    if _name_file_is_empty():
+    if _names_file_is_empty():
         raise ValueError("Names.json contains no names.")
     try:
         Decompose(input_file).sequents()
