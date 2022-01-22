@@ -1,16 +1,16 @@
 import json
 import os
-import tkinter as tk
+import tkinter as tk     # provides the functions for entering a new input file via a dialog box
 from datetime import datetime
-from tkinter import filedialog
+from tkinter import filedialog    # provides the functions for entering a new input file via a dialog box
 
 
 _current_dir = os.path.dirname(__file__)
 
 
-class _Settings:
-    file = os.path.join(_current_dir, "..", "data", "Settings.json")
-    separator = "=" * 78
+class _Settings:     # Is the object that we operate on when we change the settings
+    file = os.path.join(_current_dir, "..", "data", "Settings.json")   # This object is the settings file in "data"
+    separator = "=" * 78      # Defines the equal sign separator at the top of the menu
 
     def __init__(self):
         with open(self.file, "r") as file:
@@ -28,11 +28,11 @@ class _Settings:
     def __delitem__(self, key):
         del self.dict[key]
 
-    def update_output_file(self):
+    def update_output_file(self):    # function that writes the the output files in the "data/Runs" folder.
         now = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
         self["Output File"] = f"{now}.json"
 
-    def update_input_file(self):
+    def update_input_file(self):     # function that allows one to enter a new file with input sequents
         window = tk.Tk()
         window.withdraw()
         file_path = filedialog.askopenfilename()
@@ -57,9 +57,9 @@ class _Settings:
     def get_rule(self, symbol: str):
         return self['Sequent Rules'][symbol]
 
-    def print_rules(self):
+    def print_rules(self):    # Defines printing the rules on top of the main menu
         rules = self.get_rules()
-        print(self.separator)
+        print(self.separator)   # Prints equal signs separator
         print("Current Rules:")
         print(f'Connectives: {", ".join(rules["Rules"])}')
         print(f'Contraction: {rules["Contraction"]}, '

@@ -7,14 +7,10 @@
         "Lv": "Add",
         "Rv": "Mult",
         "L~": "Neg",
-        "R~": "Neg",
-        "Lforall": "Mult",
-        "Rforall": "Add",
-        "Lexists": "Add",
-        "Rexists": "Mult"
+        "R~": "Neg"
     },
     "Contraction": false,
     "Reflexivity": true,
-    "Input File": "/Users/adrian.mac/Projects/MaterialInference/SequentProver/data/Presets/Input/DefaultSequents.txt",
-    "Output File": "2021-05-03-18-39-05.json"
+    "Input File": "C:/Users/Gustav/Dropbox/Python/Sequents/SequentProver/data/Presets/Input/test_seqs.txt",
+    "Output File": "2022-01-22-17-30-12.json"
 }

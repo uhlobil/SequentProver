@@ -1,0 +1,3 @@
+(red(herrings) or blue(salmon)) |~ (green(tuna) and yellow(mackerel))
+|~ (forall(x)(Human(x) implies Mortal(x)))
+(forall(x)(Spicy(x) or (exists(y)(not Eats(y; x))))) |~ (exists(z)(Eats(z)))

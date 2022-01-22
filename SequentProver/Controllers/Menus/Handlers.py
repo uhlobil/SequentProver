@@ -14,10 +14,10 @@ _runs_dir = os.path.join(_data_dir, "Runs")
 
 def main_menu():
     """Handle main menu."""
-    menu_file = os.path.join(_data_dir, "Menus", "Main.json")
+    menu_file = os.path.join(_data_dir, "Menus", "Main.json")  # Main menu is Main.json in .../data/Menus
     main = Menu(file=menu_file)
-    Settings().print_rules()
-    main.open()
+    Settings().print_rules()   # Prints the rules on top of the main menu
+    main.open()    # Executes "open" from Controllers.Menu.Base with "main"
 
 
 def view_run(run):

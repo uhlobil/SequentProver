@@ -7,7 +7,7 @@ from os import system
 Option = namedtuple("Option", "label, command")
 
 
-class Menu:
+class Menu:   # Defines what we need to display and interact with the menu
     _separator = "=" * 78
     message = None
 
